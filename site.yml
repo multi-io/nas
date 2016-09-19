@@ -1,9 +1,12 @@
 ---
 
 - hosts: all
-  name: create user
+  name: install required software and create user
+  remote_user: "{{ sudo_user }}"
+  become: true
 
   tasks:
+    
     - name: install packages
       package: name={{ item }} state=present
       with_items:
@@ -14,5 +17,30 @@
       user: name={{username}} comment={{full_name}} group={{primary_group}} groups={{other_groups}}
       ## TODO password setting
 
+
+      
+- hosts: all
+  name: "set up user's initial .ssh/"
+  remote_user: "{{ sudo_user }}"
+  become: true
+
+  tasks:
+    
+    - name: "create user's .ssh/"
+      file: path="~{{username}}/.ssh" state=directory owner="{{username}}" group="{{primary_group}}"
+
+    - name: create authorized_keys
+      copy: src="~/.ssh/id_rsa.pub" dest="~{{username}}/.ssh/authorized_keys" owner="{{username}}" group="{{primary_group}}"
+      
+
+- hosts: all
+  name: set up user home
+  remote_user: "{{ username }}"
+
+  tasks:
+    
+    - name: clone home directory
+      #git: repo=files.syseleven.de:/home/oklischat/gitrepos/home.git dest=~/hm ssh_opts='-o StrictHostKeyChecking=no'
+      shell: "sleep 10 && (id; hostname) >>~/anstest.txt"
 
       
