@@ -7,6 +7,14 @@
 
   tasks:
     
+    - name: upgrade package manager
+      ## needed b/c sometimes on older Debian machines/images, repos URLs are outdated and apt-get install fails (404) without a previous update
+      vars:
+        done_file: "/tmp/{{username}}_configtasks_aptupgrade_ran"
+      shell: "test -x /usr/bin/apt-get && /usr/bin/apt-get -y update; touch {{done_file}}"
+      args:
+        creates: "{{done_file}}"
+
     - name: install packages
       package: name={{ item }} state=present
       with_items:
