@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  name: create user
+
+  tasks:
+    - name: install packages
+      package: name={{ item }} state=present
+      with_items:
+        - git
+        - ruby
+
+    - name: add user
+      user: name={{username}} comment={{full_name}} group={{primary_group}} groups={{other_groups}}
+      ## TODO password setting
+
+
+      
