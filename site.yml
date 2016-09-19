@@ -22,13 +22,17 @@
         - ruby
 
     - name: add user
-      user: name={{username}} comment={{full_name}} group={{primary_group}} groups={{other_groups}}
+      user:
+        name: "{{username}}"
+        comment: "{{full_name}}"
+        shell: "/bin/bash"
+        group: "{{primary_group}}"
+        groups: "{{other_groups}}"
       ## TODO password setting
-
 
       
 - hosts: all
-  name: "set up user's initial .ssh/"
+  name: set up user's initial .ssh/
   remote_user: "{{ sudo_user }}"
   become: true
 
@@ -41,14 +45,30 @@
       copy: src="~/.ssh/id_rsa.pub" dest="~{{username}}/.ssh/authorized_keys" owner="{{username}}" group="{{primary_group}}"
       
 
+
 - hosts: all
   name: set up user home
   remote_user: "{{ username }}"
 
-  tasks:
-    
-    - name: clone home directory
-      #git: repo=files.syseleven.de:/home/oklischat/gitrepos/home.git dest=~/hm ssh_opts='-o StrictHostKeyChecking=no'
-      shell: "sleep 10 && (id; hostname) >>~/anstest.txt"
+  vars:
+    # temporary clone target b/c git won't clone into a nonempty directory
+    tmphome: "/tmp/__tmphome"
 
-      
+  tasks:
+
+    - name: set up known_hosts
+      ## TODO if file exists, append, don't overwrite
+      copy: src='known_hosts' dest="~/.ssh/known_hosts"
+
+    - name: clone home directory into {{tmphome}}
+      git:
+        repo: "{{home_repo}}"
+        dest: "{{tmphome}}"
+        force: yes
+        recursive: no
+
+    - name: move cloned home into final place from {{tmphome}}
+      shell: "shopt -s dotglob && mv -f {{tmphome}}/* ~/"
+      args:
+        executable: "/bin/bash"
+        creates: "~/.git"
