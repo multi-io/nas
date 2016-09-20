@@ -64,7 +64,6 @@
       git:
         repo: "{{home_repo}}"
         dest: "{{tmphome}}"
-        force: yes
         recursive: no
 
     - name: move cloned home into final place from {{tmphome}}
@@ -72,3 +71,10 @@
       args:
         executable: "/bin/bash"
         creates: "~/.git"
+
+    - name: clone more repositories into ~/
+      git:
+        repo: "{{item.url}}"
+        dest: "{{item.dest}}"
+        recursive: no
+      with_items: "{{more_repos}}"
