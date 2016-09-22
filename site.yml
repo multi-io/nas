@@ -1,80 +1,12 @@
 ---
 
 - hosts: all
-  name: install required software and create user
   remote_user: "{{ sudo_user }}"
   become: true
-
-  tasks:
-    
-    - name: upgrade package manager
-      ## needed b/c sometimes on older Debian machines/images, repos URLs are outdated and apt-get install fails (404) without a previous update
-      vars:
-        done_file: "/tmp/{{username}}_configtasks_aptupgrade_ran"
-      shell: "test -x /usr/bin/apt-get && /usr/bin/apt-get -y update; touch {{done_file}}"
-      args:
-        creates: "{{done_file}}"
-
-    - name: install packages
-      package: name={{ item }} state=present
-      with_items:
-        - git
-        - ruby
-
-    - name: add user
-      user:
-        name: "{{username}}"
-        comment: "{{full_name}}"
-        shell: "/bin/bash"
-        group: "{{primary_group}}"
-        groups: "{{other_groups}}"
-      ## TODO password setting
-
-      
-- hosts: all
-  name: set up user's initial .ssh/
-  remote_user: "{{ sudo_user }}"
-  become: true
-
-  tasks:
-    
-    - name: "create user's .ssh/"
-      file: path="~{{username}}/.ssh" state=directory owner="{{username}}" group="{{primary_group}}"
-
-    - name: create authorized_keys
-      copy: src="~/.ssh/id_rsa.pub" dest="~{{username}}/.ssh/authorized_keys" owner="{{username}}" group="{{primary_group}}"
-      
-
+  roles:
+    - { role: root_accessible, when: "create_user" }
 
 - hosts: all
-  name: set up user home
   remote_user: "{{ username }}"
-
-  vars:
-    # temporary clone target b/c git won't clone into a nonempty directory
-    tmphome: "/tmp/__tmphome"
-
-  tasks:
-
-    - name: set up known_hosts
-      ## TODO if file exists, append, don't overwrite
-      copy: src='known_hosts' dest="~/.ssh/known_hosts"
-
-    - name: clone home directory into {{tmphome}}
-      git:
-        repo: "{{home_repo}}"
-        dest: "{{tmphome}}"
-        recursive: no
-
-    - name: move cloned home into final place from {{tmphome}}
-      shell: "shopt -s dotglob && mv -f {{tmphome}}/* ~/"
-      args:
-        executable: "/bin/bash"
-        creates: "~/.git"
-
-    - name: clone more repositories into ~/
-      git:
-        repo: "{{item.url}}"
-        dest: "{{item.dest}}"
-        recursive: no
-      with_items: "{{more_repos}}"
+  roles:
+    - common

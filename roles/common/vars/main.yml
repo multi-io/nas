@@ -1,0 +1,4 @@
+---
+
+# temporary clone target b/c git won't clone into a nonempty directory
+tmphome: "/tmp/__tmphome"

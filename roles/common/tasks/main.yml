@@ -1,0 +1,24 @@
+---
+
+- name: set up known_hosts
+  ## TODO if file exists, append, don't overwrite
+  copy: src='known_hosts' dest="~/.ssh/known_hosts"
+
+- name: clone home directory into {{tmphome}}
+  git:
+    repo: "{{home_repo}}"
+    dest: "{{tmphome}}"
+    recursive: no
+
+- name: move cloned home into final place from {{tmphome}}
+  shell: "shopt -s dotglob && mv -f {{tmphome}}/* ~/"
+  args:
+    executable: "/bin/bash"
+    creates: "~/.git"
+
+- name: clone more repositories into ~/
+  git:
+    repo: "{{item.url}}"
+    dest: "{{item.dest}}"
+    recursive: no
+  with_items: "{{more_repos}}"
