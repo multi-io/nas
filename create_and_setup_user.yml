@@ -6,16 +6,16 @@
   
   vars_prompt:  # TODO: when: create_user
     - name: "password"
-      prompt: "Enter password (ony used if a user is created)"
+      prompt: "Enter password (only used if a user is created)"
       private: yes
       encrypt: "sha512_crypt"
       confirm: yes
       salt_size: 7
 
   roles:
-    - { role: root_accessible, when: "create_user" }
+    - { role: create_user, when: "create_user" }
 
 - hosts: all
   remote_user: "{{ username }}"
   roles:
-    - common
+    - setup_user
