@@ -21,7 +21,7 @@
     shell: "/bin/bash"
     group: "{{primary_group}}"
     groups: "{{other_groups}}"
-  ## TODO password setting
+    password: "{{password}}"
 
 - name: "create user's initial .ssh/"
   file: path="~{{username}}/.ssh" state=directory owner="{{username}}" group="{{primary_group}}"
