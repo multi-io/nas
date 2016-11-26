@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+  remote_user: "{{ sudo_user }}"
+  become: true
+
+  vars:
+    username: olaf
+    primary_group: users
+    other_groups: sudo,src,docker
+  
+  vars_prompt:  # TODO: when: create_user
+    - name: "password"
+      prompt: "Enter password (only used if a user is created)"
+      private: yes
+      encrypt: "sha512_crypt"
+      confirm: yes
+      salt_size: 7
+
+  roles:
+    - dockerd
+    - create_user
+
+- hosts: all
+  remote_user: "{{ username }}"
+  roles:
+    - setup_user

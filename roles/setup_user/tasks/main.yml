@@ -22,6 +22,7 @@
     dest: "{{item.dest}}"
     recursive: no
   with_items: "{{more_repos}}"
+  ignore_errors: yes
 
 - name: copy utils/Makefile.conf
   command: cp ~/utils/Makefile.conf.sample ~/utils/Makefile.conf
