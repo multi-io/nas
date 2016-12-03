@@ -1,0 +1,11 @@
+---
+
+- name: install packages
+  package: name={{ item }} state=present
+  with_items:
+    - git
+    - ruby
+    - make
+    - netcat
+    - bridge-utils
+    - traceroute

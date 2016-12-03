@@ -8,13 +8,6 @@
   args:
     creates: "{{done_file}}"
 
-- name: install packages
-  package: name={{ item }} state=present
-  with_items:
-    - git
-    - ruby
-    - make
-
 - name: add user
   user:
     name: "{{username}}"

@@ -20,6 +20,7 @@
   roles:
     - dockerd
     - create_user
+    - admin_packages
 
 - hosts: all
   remote_user: "{{ username }}"
