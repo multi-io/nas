@@ -19,8 +19,5 @@ RUN /usr/sbin/a2dissite 000-default
 RUN /usr/sbin/a2ensite data
 RUN /usr/sbin/a2enmod ssl
 
-EXPOSE 80
-EXPOSE 443
-
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
