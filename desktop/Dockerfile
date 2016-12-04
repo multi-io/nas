@@ -22,7 +22,7 @@ COPY services.conf /etc/supervisor/conf.d/services.conf
 RUN git config --global user.email "olaf.klischat@gmail.com"
 RUN git config --global user.name "Olaf Klischat"
 
-RUN apt-get -yy install ruby bc lsb-release make gcc
+RUN apt-get -yy install ruby bc lsb-release make gcc net-tools iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat
 
 EXPOSE 22
 CMD ["/usr/bin/supervisord"]
