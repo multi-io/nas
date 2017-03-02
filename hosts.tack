@@ -1,1 +1,1 @@
-tack sudo_user='root' username='olaf' other_groups='sudo,src'
+tack sudo_user='root' username='olaf' other_groups='sudo,src' docker_machine_name='tack'

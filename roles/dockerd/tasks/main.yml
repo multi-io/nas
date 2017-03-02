@@ -1,6 +1,8 @@
 ---
 
-- name: install packages
-  package: name={{ item }} state=present
-  with_items:
-    - "{{docker_package}}"
+# TODO using docker-machine to set up docker on the remote machine is easy but quick&dirty. Requires docker-machine on
+# the local host, no control over key/cert creation, changes stuff (adds docker-machine config) locally, outside the
+# project directory
+- name: docker-machine setup
+  become: false
+  local_action: shell docker-machine status {{docker_machine_name}} || docker-machine create --driver generic --generic-ip-address={{ inventory_hostname }} --generic-ssh-user={{sudo_user}} {% if ansible_ssh_private_key_file is defined %} --generic-ssh-key {{ansible_ssh_private_key_file}} {% endif %} {{docker_machine_name}}
