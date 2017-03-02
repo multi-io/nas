@@ -7,7 +7,6 @@
   vars:
     username: olaf
     primary_group: users
-    other_groups: sudo,src,docker
   
   vars_prompt:  # TODO: when: create_user
     - name: "password"
