@@ -17,7 +17,7 @@
       salt_size: 7
 
   roles:
-    - dockerd
+    - docker-machine
     - create_user
     - admin_packages
 

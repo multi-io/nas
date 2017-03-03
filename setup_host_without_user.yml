@@ -5,5 +5,5 @@
   become: true
 
   roles:
-    - dockerd
+    - docker-machine
     - admin_packages
