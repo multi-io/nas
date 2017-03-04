@@ -1,0 +1,11 @@
+---
+
+home_repo: oklischat@files.syseleven.de:/home/oklischat/gitrepos/home.git
+
+more_repos:
+  - { url: 'oklischat@files.syseleven.de:/home/oklischat/gitrepos/utils.git', dest: '~/utils' }
+  - { url: 'olaf@olafklischat.mooo.com:/home/olaf/gitrepos/mydocs-priv.git', dest: '~/doc/mydocs-priv' }
+  - { url: 'git@github.com:multi-io/mydocs-pub.git', dest: '~/doc/mydocs-pub' }
+
+# temporary clone target b/c git won't clone into a nonempty directory
+tmphome: "/tmp/__tmphome"

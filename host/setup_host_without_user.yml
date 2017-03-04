@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  remote_user: "{{ sudo_user }}"
+  become: true
+
+  roles:
+    - docker-machine
+    - admin_packages

@@ -1,0 +1,24 @@
+---
+
+- name: upgrade package manager
+  ## needed b/c sometimes on older Debian machines/images, repos URLs are outdated and apt-get install fails (404) without a previous update
+  vars:
+    done_file: "/tmp/{{username}}_configtasks_aptupgrade_ran"
+  shell: "test -x /usr/bin/apt-get && /usr/bin/apt-get -y update; touch {{done_file}}"
+  args:
+    creates: "{{done_file}}"
+
+- name: add user
+  user:
+    name: "{{username}}"
+    comment: "{{full_name}}"
+    shell: "/bin/bash"
+    group: "{{primary_group}}"
+    groups: "{{other_groups}}"
+    password: "{{password}}"
+
+- name: "create user's initial .ssh/"
+  file: path="~{{username}}/.ssh" state=directory owner="{{username}}" group="{{primary_group}}"
+
+- name: create authorized_keys for running ansible tasks as this user
+  copy: src="~/.ssh/id_rsa.pub" dest="~{{username}}/.ssh/authorized_keys" owner="{{username}}" group="{{primary_group}}"
