@@ -1,0 +1,46 @@
+version: '2'
+
+
+networks:
+
+  pubnet:
+    driver: macvlan
+    ipam:
+      driver: default
+      config:
+        # dhcp lease range 192.168.142.50..150 => container range 192.168.142.16/28 (.16....31)
+        - subnet: 192.168.142.0/24
+          ip_range: 192.168.142.16/28
+          gateway: 192.168.142.1
+    driver_opts:
+      parent: enp2s0
+
+
+volumes:
+
+  desktop_etc_ssh:
+
+
+services:
+
+  tackwww:
+    build: ./wwwpublish
+    image: oklischat/wwwpublish
+    hostname: tackwww
+    networks:
+      pubnet:
+        ipv4_address: 192.168.142.17
+    volumes:
+      - /media:/media
+
+  tackd:
+    build: ./desktop
+    image: oklischat/desktop
+    hostname: tackd
+    networks:
+      pubnet:
+        ipv4_address: 192.168.142.16
+    volumes:
+      - desktop_etc_ssh:/etc/ssh
+      - /home:/home
+      - /media:/media
