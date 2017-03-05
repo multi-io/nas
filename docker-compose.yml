@@ -58,3 +58,29 @@ services:
       - /home:/home
       - /media:/media
 
+  files:
+    image: dperson/samba
+    hostname: ${BASENAME}files
+    networks:
+      pubnet:
+        ipv4_address: 192.168.142.18
+    environment:
+      USERID: ${USER_ID}
+      GROUPID: ${USERS_GID}
+      TZ: 'CET'
+      NMBD: 'true'
+    volumes:
+      - /home:/home
+      - /media:/media
+    command:
+      - '-u'
+      - 'john;badpass'
+      - '-s'
+      - 'ctd;/media/data/ctd'
+      - '-s'
+      - "john private;/media/data/olaf;yes;no;no;john"
+    # TODO: [homes] share
+
+
+# TODO:
+#  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
