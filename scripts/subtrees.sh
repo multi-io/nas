@@ -6,3 +6,4 @@ fi
 declare -A subtrees  # map subdirname => remote
 
 subtrees['host']='olaf@tackd.:/home/olaf/gitrepos/devboxadmin.git'
+subtrees['samba']='git@github.com:multi-io/samba.git'

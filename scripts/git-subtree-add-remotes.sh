@@ -2,7 +2,7 @@
 # initialize git remotes that the other git-* scripts rely on.
 # Needs to be done only once
 
-set -e
+set -x
 
 cd "$(dirname $0)/.."
 
