@@ -59,7 +59,9 @@ services:
       - /media:/media
 
   files:
-    image: dperson/samba
+    build:
+      context: ./samba
+    image: oklischat/samba
     hostname: ${BASENAME}files
     networks:
       pubnet:
