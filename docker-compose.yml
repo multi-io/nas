@@ -23,9 +23,9 @@ volumes:
 
 services:
 
-  tackwww:
+  www:
     build:
-      context: ./wwwpublish
+      context: ./www
       args:
         USER_ID: ${USER_ID}
         USER_NAME: ${USER_NAME}
@@ -39,7 +39,7 @@ services:
       - /home:/home:ro
       - /media:/media:ro
 
-  tackd:
+  desktop:
     build:
       context: ./desktop
       args:
