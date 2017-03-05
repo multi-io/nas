@@ -24,19 +24,32 @@ volumes:
 services:
 
   tackwww:
-    build: ./wwwpublish
+    build:
+      context: ./wwwpublish
+      args:
+        USER_ID: ${USER_ID}
+        USER_NAME: ${USER_NAME}
+        USERS_GROUP: ${USERS_GROUP}
     image: oklischat/wwwpublish
-    hostname: tackwww
+    hostname: ${BASENAME}www
     networks:
       pubnet:
         ipv4_address: 192.168.142.17
     volumes:
-      - /media:/media
+      - /home:/home:ro
+      - /media:/media:ro
 
   tackd:
-    build: ./desktop
+    build:
+      context: ./desktop
+      args:
+        USER_ID: ${USER_ID}
+        USER_NAME: ${USER_NAME}
+        USERS_GROUP: ${USERS_GROUP}
+        USER_FULLNAME: ${USER_FULLNAME}
+        USER_EMAIL: ${USER_EMAIL}
     image: oklischat/desktop
-    hostname: tackd
+    hostname: ${BASENAME}d
     networks:
       pubnet:
         ipv4_address: 192.168.142.16
@@ -44,3 +57,4 @@ services:
       - desktop_etc_ssh:/etc/ssh
       - /home:/home
       - /media:/media
+
