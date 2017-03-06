@@ -1,0 +1,17 @@
+   security = user
+   create mask = 0664
+   force create mode = 0664
+   directory mask = 0775
+   force directory mode = 0775
+   force user = smbuser
+   force group = users
+   load printers = no
+   printing = bsd
+   printcap name = /dev/null
+   disable spoolss = yes
+   socket options = TCP_NODELAY
+
+[homes]
+   comment = Home Directories
+   browseable = yes
+

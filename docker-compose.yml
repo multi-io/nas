@@ -76,13 +76,11 @@ services:
       - /media:/media
     command:
       - '-u'
-      - 'john;badpass'
+      - "${USER_NAME};/tmp/password"
       - '-s'
-      - 'ctd;/media/data/ctd'
-      - '-s'
-      - "john private;/media/data/olaf;yes;no;no;john"
-    # TODO: [homes] share
+      - "data;/media/data;yes;no;no;${USER_NAME}"
 
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
+#  - more services: mail, backup, monitoring
