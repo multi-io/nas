@@ -9,3 +9,4 @@
     - netcat
     - bridge-utils
     - traceroute
+    - virtualbox-dkms
