@@ -50,6 +50,7 @@ services:
         USER_EMAIL: ${USER_EMAIL}
     image: oklischat/desktop
     hostname: ${BASENAME}d
+    privileged: true
     networks:
       pubnet:
         ipv4_address: 192.168.142.16
