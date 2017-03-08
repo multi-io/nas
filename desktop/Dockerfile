@@ -28,7 +28,7 @@ COPY services.conf /etc/supervisor/conf.d/services.conf
 RUN git config --global user.email "${USER_EMAIL}"
 RUN git config --global user.name "${USER_FULLNAME}"
 
-RUN apt-get -yy install ruby bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat
+RUN apt-get -yy install ruby bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr
 
 CMD ["/usr/bin/supervisord"]
 
