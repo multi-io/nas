@@ -58,6 +58,7 @@ services:
       - desktop_etc_ssh:/etc/ssh
       - /home:/home
       - /media:/media
+      - /var/run/docker.sock:/var/run/docker.sock
 
   files:
     build:
