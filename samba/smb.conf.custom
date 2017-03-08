@@ -14,4 +14,5 @@
 [homes]
    comment = Home Directories
    browseable = yes
-
+   read only = no
+   guest ok = no
