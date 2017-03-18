@@ -10,6 +10,7 @@
    printcap name = /dev/null
    disable spoolss = yes
    socket options = TCP_NODELAY
+   csc policy = disable
 
 [homes]
    comment = Home Directories
