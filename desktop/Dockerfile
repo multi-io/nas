@@ -28,7 +28,8 @@ COPY services.conf /etc/supervisor/conf.d/services.conf
 RUN git config --global user.email "${USER_EMAIL}"
 RUN git config --global user.name "${USER_FULLNAME}"
 
-RUN apt-get -yy install ruby bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io
+RUN apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io
+RUN curl -s https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb
 
 CMD ["/usr/bin/supervisord"]
 
