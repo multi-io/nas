@@ -4,6 +4,7 @@ MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 ARG USER_ID=1000
 ARG USER_NAME=oklischat
 ARG USERS_GROUP=users
+ARG USERS_MORE_GROUPS="sudo,dialout"
 ARG USER_FULLNAME="Olaf Klischat"
 ARG USER_EMAIL=olaf@invalid.de
 
@@ -21,15 +22,15 @@ COPY run-sshd.sh /usr/local/bin/run-sshd.sh
 RUN chmod ugo+x /usr/local/bin/run-sshd.sh
 
 RUN groupadd -g ${USER_ID} ${USER_NAME}
-RUN useradd -u ${USER_ID} -s /bin/bash -d /home/${USER_NAME} -g ${USERS_GROUP} -G "${USER_NAME},sudo" -p '$6$DR2WkWWU$NZkLCzN10KdmA7LJodvKLcraXWdL/tfzriXu68QpeOz8aumwvAZpNdX1pflxBW.BnMvP61y.8HZ0KGYSCifRR0' ${USER_NAME}
+RUN useradd -u ${USER_ID} -s /bin/bash -d /home/${USER_NAME} -g ${USERS_GROUP} -G "${USER_NAME},${USERS_MORE_GROUPS}" -p '$6$DR2WkWWU$NZkLCzN10KdmA7LJodvKLcraXWdL/tfzriXu68QpeOz8aumwvAZpNdX1pflxBW.BnMvP61y.8HZ0KGYSCifRR0' ${USER_NAME}
 
 COPY services.conf /etc/supervisor/conf.d/services.conf
 
 RUN git config --global user.email "${USER_EMAIL}"
 RUN git config --global user.name "${USER_FULLNAME}"
 
-RUN apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io
 RUN curl -s https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb
+RUN apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu
 
 CMD ["/usr/bin/supervisord"]
 
