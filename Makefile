@@ -6,3 +6,9 @@ run:
 
 build:
 	docker-compose build
+
+clean:
+	docker-compose down
+
+superclean:
+	docker-compose down --rmi all
