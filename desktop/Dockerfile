@@ -16,7 +16,7 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update
 RUN apt-get -yy upgrade
 
-RUN apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo
+RUN apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick
 
 COPY run-sshd.sh /usr/local/bin/run-sshd.sh
 RUN chmod ugo+x /usr/local/bin/run-sshd.sh
