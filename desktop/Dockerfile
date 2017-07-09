@@ -14,7 +14,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update && apt-get -yy upgrade && \
-    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick
+    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi
 
 COPY run-sshd.sh /usr/local/bin/run-sshd.sh
 COPY services.conf /etc/supervisor/conf.d/services.conf
