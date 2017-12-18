@@ -20,6 +20,9 @@ volumes:
 
   desktop_etc_ssh:
 
+  ovpn-config:
+    external: true
+
 
 services:
 
@@ -81,6 +84,19 @@ services:
       - "${USER_NAME};/tmp/password"
       - '-s'
       - "data;/media/data;yes;no;no;${USER_NAME}"
+
+  vpn:
+    image: kylemanna/openvpn
+    hostname: ${BASENAME}vpn
+    networks:
+      pubnet:
+        ipv4_address: 192.168.142.19
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "1194:1194/udp"
+    volumes:
+      - ovpn-config:/etc/openvpn 
 
 
 # TODO:
