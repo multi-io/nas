@@ -32,9 +32,12 @@ _rm-ovpn-config:
 	docker volume rm -f ovpn-config
 	rm -f ovpn-config.tgz $(VPN_CLIENTNAME).ovpn
 
+rm-ovpn-config:
+	set -a; . ./_getenv.sh && $(MAKE) _rm-ovpn-config
+
 clean:
 	./dcompose.sh down
 
 superclean:
 	./dcompose.sh down --rmi all
-	$(MAKE) _rm-ovpn-config
+	set -a; . ./_getenv.sh && $(MAKE) _rm-ovpn-config
