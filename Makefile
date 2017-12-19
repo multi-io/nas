@@ -1,12 +1,12 @@
 run: build
-	./dcompose.sh up -d --build; $(MAKE) -C samba clean
+	./dcompose.sh up -d --build $(SVC); $(MAKE) -C samba clean
 
 build: # ovpn-config
 	# hack to avoid having the cleartext passwords in committed files:
 	# Makefile decrypts (locally), Dockerfiles uploads, image runtime arguments pass it to samba.sh to create the user
 	$(MAKE) -C samba data/password
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
-	./dcompose.sh build
+	./dcompose.sh build $(SVC)
 
 
 OVPN_TMPVOL=ovpntmp
@@ -28,12 +28,13 @@ ovpn-config.tgz:
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full $(VPN_CLIENTNAME) nopass
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -i kylemanna/openvpn /bin/bash -c 'cd /etc/openvpn && tar cz .' >$@
 
-rm-ovpn-config:
+_rm-ovpn-config:
 	docker volume rm -f ovpn-config
+	rm -f ovpn-config.tgz $(VPN_CLIENTNAME).ovpn
 
 clean:
 	./dcompose.sh down
 
 superclean:
 	./dcompose.sh down --rmi all
-	$(MAKE) rm-ovpn-config
+	$(MAKE) _rm-ovpn-config

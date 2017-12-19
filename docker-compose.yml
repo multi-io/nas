@@ -8,10 +8,10 @@ networks:
     ipam:
       driver: default
       config:
-        # dhcp lease range 192.168.142.50..150 => container range 192.168.142.16/28 (.16....31)
-        - subnet: 192.168.142.0/24
-          ip_range: 192.168.142.16/28
-          gateway: 192.168.142.1
+        # dhcp lease range ${LAN_SUBNET}.50..150 => container range ${LAN_SUBNET}.16/28 (.16....31)
+        - subnet: ${LAN_SUBNET}.0/24
+          ip_range: ${LAN_SUBNET}.16/28
+          gateway: ${LAN_GATEWAY}
     driver_opts:
       parent: enp2s0
 
@@ -37,7 +37,7 @@ services:
     hostname: ${BASENAME}www
     networks:
       pubnet:
-        ipv4_address: 192.168.142.17
+        ipv4_address: ${LAN_SUBNET}.17
     volumes:
       - /home:/home:ro
       - /media:/media:ro
@@ -56,7 +56,7 @@ services:
     privileged: true
     networks:
       pubnet:
-        ipv4_address: 192.168.142.16
+        ipv4_address: ${LAN_SUBNET}.16
     volumes:
       - desktop_etc_ssh:/etc/ssh
       - /home:/home
@@ -70,7 +70,7 @@ services:
     hostname: ${BASENAME}files
     networks:
       pubnet:
-        ipv4_address: 192.168.142.18
+        ipv4_address: ${LAN_SUBNET}.18
     environment:
       USERID: ${USER_ID}
       GROUPID: ${USERS_GID}
@@ -90,11 +90,9 @@ services:
     hostname: ${BASENAME}vpn
     networks:
       pubnet:
-        ipv4_address: 192.168.142.19
+        ipv4_address: ${LAN_SUBNET}.19
     cap_add:
       - NET_ADMIN
-    ports:
-      - "1194:1194/udp"
     volumes:
       - ovpn-config:/etc/openvpn 
 
