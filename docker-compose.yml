@@ -96,6 +96,14 @@ services:
     volumes:
       - ovpn-config:/etc/openvpn 
 
+  prometheus:
+    build:
+      context: ./prometheus
+    image: oklischat/prometheus
+    hostname: prom
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.21
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
