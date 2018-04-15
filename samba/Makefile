@@ -1,5 +1,5 @@
-data/password: data/password.gpg
-	gpg --quiet --keyid-format LONG --no-tty --output $@ --decrypt $<
+data/password: data/password.asc
+	gpg -o $@ --decrypt $<
 
 .PHONY: clean
 
