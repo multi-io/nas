@@ -8,6 +8,8 @@ build: # ovpn-config
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
 	./dcompose.sh build $(SVC)
 
+up:
+	./dcompose.sh up -d $(SVC)
 
 OVPN_TMPVOL=ovpntmp
 
