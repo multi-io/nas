@@ -1,4 +1,4 @@
-data/password: data/password.asc
+data/password: data/password.gpg
 	gpg -o $@ --decrypt $<
 
 .PHONY: clean
