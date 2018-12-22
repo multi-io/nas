@@ -1,0 +1,11 @@
+SHELL=/bin/bash
+PATH=~/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# m h dom mon dow command
+* *	* * * test -d ~/cron.minutely && run-parts --report ~/cron.minutely
+8,38 *	* * *	test -d ~/cron.30minutely && run-parts --report ~/cron.30minutely
+17 *	* * *	test -d ~/cron.hourly && run-parts --report ~/cron.hourly
+25 6	* * *	test -d ~/cron.daily && run-parts --report ~/cron.daily
+47 6	* * 7	test -d ~/cron.weekly && run-parts --report ~/cron.weekly
+52 6	1 * *	test -d ~/cron.monthly && run-parts --report ~/cron.monthly
+#

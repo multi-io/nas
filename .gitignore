@@ -1,2 +1,4 @@
 *~
 /samba/data/password
+/.idea
+.DS_Store

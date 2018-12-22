@@ -105,6 +105,22 @@ services:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.21
 
+  cron:
+    build:
+      context: ./cron
+      args:
+        USER_ID: ${USER_ID}
+        USER_NAME: ${USER_NAME}
+        USERS_GROUP: ${USERS_GROUP}
+        USER_FULLNAME: ${USER_FULLNAME}
+        USER_EMAIL: ${USER_EMAIL}
+    image: oklischat/cron
+    hostname: ${BASENAME}-cron
+    volumes:
+      - /home:/home
+      - /media:/media
+      - /var/run/docker.sock:/var/run/docker.sock
+
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
 #  - more services: mail, backup, monitoring
