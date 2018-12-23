@@ -21,7 +21,10 @@ COPY user-crontab /var/spool/cron/crontabs/${USER_NAME}
 RUN groupadd -g ${USER_ID} ${USER_NAME} && \
     useradd -u ${USER_ID} -s /bin/bash -d /home/${USER_NAME} -g ${USERS_GROUP} -G "${USER_NAME},${USERS_MORE_GROUPS}" ${USER_NAME} && \
     chown "${USER_NAME}:crontab" /var/spool/cron/crontabs/${USER_NAME} && \
-    chmod 600 /var/spool/cron/crontabs/${USER_NAME}
+    chmod 600 /var/spool/cron/crontabs/${USER_NAME} && \
+    touch /var/log/cron-user.log && \
+    chown "${USER_NAME}:crontab" /var/log/cron-user.log && \
+    chmod 644 /var/log/cron-user.log
 
 ENTRYPOINT ["/usr/sbin/cron"]
 CMD ["-f"]
