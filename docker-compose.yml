@@ -23,6 +23,7 @@ volumes:
   ovpn-config:
     external: true
 
+  prom-tsdb:
 
 services:
 
@@ -104,6 +105,8 @@ services:
     networks:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.21
+    volumes:
+      - prom-tsdb:/prometheus
 
   cron:
     build:
