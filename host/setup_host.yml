@@ -17,6 +17,7 @@
       salt_size: 7
 
   roles:
+    - debian_base
     - docker-machine
     - create_user
     - admin_packages

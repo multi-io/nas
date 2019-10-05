@@ -1,0 +1,7 @@
+deb https://snapshot.debian.org/archive/debian/{{debian_snapshot}}/ {{debian_release}} main contrib non-free
+deb-src https://snapshot.debian.org/archive/debian/{{debian_snapshot}}/ {{debian_release}} main contrib non-free
+
+{% if debian_fallback_release is defined and debian_fallback_release|length %}
+deb https://snapshot.debian.org/archive/debian/{{debian_snapshot}}/ {{debian_fallback_release}} main contrib non-free
+deb-src https://snapshot.debian.org/archive/debian/{{debian_snapshot}}/ {{debian_fallback_release}} main contrib non-free
+{% endif %}

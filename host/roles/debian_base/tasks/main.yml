@@ -1,0 +1,39 @@
+- name: write main sources.list
+  template:
+    src: apt-sources.list.j2
+    dest: "/etc/apt/sources.list"
+    owner: "root"
+    group: "root"
+
+- name: write apt preferences
+  template:
+    src: apt-preferences.j2
+    dest: "/etc/apt/preferences"
+    owner: "root"
+    group: "root"
+
+- name: install gpg
+  apt:
+    name: gpg
+    state: present
+    update_cache: yes
+
+- name: write docker sources.list
+  template:
+    src: apt-docker.list.j2
+    dest: "/etc/apt/sources.list.d/docker.list"
+    owner: "root"
+    group: "root"
+
+- name: Add docker apt signing key
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: 7EA0A9C3F273FCD8
+    state: present
+
+- name: apt dist-upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+    autoremove: yes
+    allow_unauthenticated: yes

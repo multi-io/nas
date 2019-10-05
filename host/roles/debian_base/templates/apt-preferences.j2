@@ -1,0 +1,13 @@
+Package: *
+Pin: release a=apt-build
+Pin-Priority: 981
+
+Package: *
+Pin: release n={{debian_release}}
+Pin-Priority: 980
+
+{% if debian_fallback_release is defined and debian_fallback_release|length %}
+Package: *
+Pin: release n={{debian_fallback_release}}
+Pin-Priority: 90
+{% endif %}

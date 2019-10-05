@@ -1,0 +1,3 @@
+debian_snapshot: 20180728T210353Z
+debian_release: jessie
+#debian_fallback_release: experimental

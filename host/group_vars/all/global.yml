@@ -1,3 +1,5 @@
----
+debian_snapshot: 20191004T203900Z
+debian_release: buster
+#debian_fallback_release: experimental
 
 create_user: yes
