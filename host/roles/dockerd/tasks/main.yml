@@ -1,6 +1,9 @@
----
-
-- name: install packages
-  package: name={{ item }} state=present
-  with_items:
-    - "{{docker_package}}"
+- name: install docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose
+    state: present
+    update_cache: yes
