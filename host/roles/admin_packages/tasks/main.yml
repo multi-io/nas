@@ -6,8 +6,9 @@
     - git
     - ruby
     - make
+    - net-tools
     - netcat
     - bridge-utils
     - traceroute
     - tcpdump
-    - virtualbox-dkms
+    #- virtualbox-dkms
