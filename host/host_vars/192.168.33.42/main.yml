@@ -3,5 +3,5 @@ dockerd:
     enabled: yes
     cert:
       #hostname: docker.host.name
-      alt_names: ''
+      alt_names: 'IP:192.168.33.42'
       valid_days: 3650

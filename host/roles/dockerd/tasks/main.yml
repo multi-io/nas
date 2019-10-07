@@ -1,3 +1,59 @@
+# TODO try to use openssl* modules with with_items
+
+- name: create CA cert and key
+  delegate_to: localhost
+  become: false
+  command: "{{ role_path }}/bin/create_cert.sh -c 'Docker' -d {{ dockerd.remote_access.cert.valid_days }} {{ role_path }}/out/{{inventory_hostname}}/ca"
+  args:
+    creates: "{{ role_path }}/out/{{inventory_hostname}}/ca*.pem"
+  when: dockerd.remote_access.enabled
+
+- name: create server cert and key
+  delegate_to: localhost
+  become: false
+  command: "{{ role_path }}/bin/create_cert.sh -c '{{ dockerd.remote_access.cert.hostname | default(inventory_hostname) }}' -a '{{ dockerd.remote_access.cert.alt_names }}' -e serverAuth -d {{ dockerd.remote_access.cert.valid_days }} -s {{ role_path }}/out/{{inventory_hostname}}/ca {{ role_path }}/out/{{inventory_hostname}}/server"
+  args:
+    creates: "{{ role_path }}/out/{{inventory_hostname}}/server*.pem"
+  when: dockerd.remote_access.enabled
+
+- name: create client cert and key
+  delegate_to: localhost
+  become: false
+  command: "{{ role_path }}/bin/create_cert.sh -c 'client' -e clientAuth -d {{ dockerd.remote_access.cert.valid_days }} -s {{ role_path }}/out/{{inventory_hostname}}/ca {{ role_path }}/out/{{inventory_hostname}}/client"
+  args:
+    creates: "{{ role_path }}/out/{{inventory_hostname}}/client*.pem"
+  when: dockerd.remote_access.enabled
+
+- name: upload server certificate and key
+  copy: src={{ role_path }}/out/{{inventory_hostname}}/{{ item }} dest=/etc/docker/
+  with_items:
+    - ca.pem
+    - server-key.pem
+    - server.pem
+  notify: restart docker
+  when: dockerd.remote_access.enabled
+
+- name: chmod server keys
+  file:
+    path: /etc/docker/{{item.name}}
+    owner: root
+    group: root
+    mode: "{{item.mode}}"
+  with_items:
+    - name: ca.pem
+      mode: '644'
+    - name: server-key.pem
+      mode: '600'
+    - name: server.pem
+      mode: '644'
+  notify: restart docker
+  when: dockerd.remote_access.enabled
+
+- name: upload server certificate and key
+  copy: src=files/daemon-tls.conf dest=/etc/systemd/system/docker.service.d/
+  notify: restart docker
+  when: dockerd.remote_access.enabled
+
 - name: install docker packages
   apt:
     name:

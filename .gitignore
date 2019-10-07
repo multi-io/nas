@@ -2,3 +2,4 @@
 /samba/data/password
 /.idea
 .DS_Store
+/host/roles/dockerd/out/

@@ -9,3 +9,7 @@ create_vagrant_machine:
 
 destroy_vagrant_machine:
 	vagrant destroy
+
+regenerate_dockerd_pki:
+	rm -fr roles/dockerd/out/*
+	$(MAKE) dockerd
