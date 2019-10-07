@@ -6,5 +6,5 @@
 
   roles:
     - debian_base
-    - docker-machine
+    - dockerd
     - admin_packages
