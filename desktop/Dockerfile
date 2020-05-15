@@ -11,15 +11,15 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+COPY run-sshd.sh /usr/local/bin/run-sshd.sh
+COPY services.conf /tmp/services.conf
+
 RUN apt-get update && apt-get -yy upgrade && \
     apt-get -yy install locales && \
     locale-gen en_US.UTF-8; locale-gen de_DE.UTF-8 && \
-    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi
-
-COPY run-sshd.sh /usr/local/bin/run-sshd.sh
-COPY services.conf /etc/supervisor/conf.d/services.conf
-
-RUN chmod ugo+x /usr/local/bin/run-sshd.sh && \
+    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi && \
+    mv /tmp/services.conf /etc/supervisor/conf.d/services.conf && \
+    chmod ugo+x /usr/local/bin/run-sshd.sh && \
     groupadd -g ${USER_ID} ${USER_NAME} && \
     useradd -u ${USER_ID} -s /bin/bash -d /home/${USER_NAME} -g ${USERS_GROUP} -G "${USER_NAME},${USERS_MORE_GROUPS}" -p '$6$DR2WkWWU$NZkLCzN10KdmA7LJodvKLcraXWdL/tfzriXu68QpeOz8aumwvAZpNdX1pflxBW.BnMvP61y.8HZ0KGYSCifRR0' ${USER_NAME} && \
     git config --global user.email "${USER_EMAIL}" && \
