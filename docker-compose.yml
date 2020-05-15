@@ -97,6 +97,16 @@ services:
     volumes:
       - ovpn-config:/etc/openvpn 
 
+  vnc:
+    image: oklischat/ubuntu-xfce-vnc:1.4.1
+    hostname: ${BASENAME}vnc
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.20
+    volumes:
+      - /home:/home
+      - /media:/media
+
   prometheus:
     build:
       context: ./prometheus
