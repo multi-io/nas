@@ -98,7 +98,7 @@ services:
       - ovpn-config:/etc/openvpn 
 
   vnc:
-    image: oklischat/ubuntu-xfce-vnc:1.4.1
+    image: oklischat/ubuntu-xfce-vnc:1.5.0
     hostname: ${BASENAME}vnc
     networks:
       pubnet:
