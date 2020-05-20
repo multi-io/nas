@@ -20,6 +20,8 @@ volumes:
 
   desktop_etc_ssh:
 
+  desktop_cron_spool:
+
   ovpn-config:
     external: true
 
@@ -60,6 +62,7 @@ services:
         ipv4_address: ${LAN_SUBNET}.16
     volumes:
       - desktop_etc_ssh:/etc/ssh
+      - desktop_cron_spool:/var/spool/cron
       - /home:/home
       - /media:/media
       - /var/run/docker.sock:/var/run/docker.sock
