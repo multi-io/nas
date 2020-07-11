@@ -25,7 +25,7 @@ COPY port80.conf /etc/apache2/sites-available/
 
 RUN /usr/sbin/a2dissite 000-default && \
     /usr/sbin/a2ensite port80 && \
-    /usr/sbin/a2enmod ssl
+    /usr/sbin/a2enmod ssl cgi
 
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
