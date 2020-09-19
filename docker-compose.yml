@@ -22,6 +22,10 @@ volumes:
 
   desktop_cron_spool:
 
+  desktop_mail_spool:
+
+  desktop_log:
+
   ovpn-config:
     external: true
 
@@ -63,6 +67,8 @@ services:
     volumes:
       - desktop_etc_ssh:/etc/ssh
       - desktop_cron_spool:/var/spool/cron
+      - desktop_mail_spool:/var/spool/mail
+      - desktop_log:/var/log
       - /home:/home
       - /media:/media
       - /var/run/docker.sock:/var/run/docker.sock
