@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_ID=1000
@@ -11,7 +11,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN apt-get update && apt-get -yy upgrade && \
+RUN echo y | unminimize && \
     apt-get -yy install locales && \
     locale-gen en_US.UTF-8; locale-gen de_DE.UTF-8 && \
     apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi && \
