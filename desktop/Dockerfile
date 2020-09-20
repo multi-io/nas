@@ -14,7 +14,7 @@ ENV LC_ALL en_US.UTF-8
 RUN echo y | unminimize && \
     apt-get -yy install locales && \
     locale-gen en_US.UTF-8; locale-gen de_DE.UTF-8 && \
-    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi && \
+    apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi inetutils-syslogd && \
     groupadd -g ${USER_ID} ${USER_NAME} && \
     useradd -u ${USER_ID} -s /bin/bash -d /home/${USER_NAME} -g ${USERS_GROUP} -G "${USER_NAME},${USERS_MORE_GROUPS}" -p '$6$DR2WkWWU$NZkLCzN10KdmA7LJodvKLcraXWdL/tfzriXu68QpeOz8aumwvAZpNdX1pflxBW.BnMvP61y.8HZ0KGYSCifRR0' ${USER_NAME} && \
     git config --global user.email "${USER_EMAIL}" && \
