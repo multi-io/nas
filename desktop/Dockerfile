@@ -21,7 +21,7 @@ RUN yes | unminimize && \
     git config --global user.email "${USER_EMAIL}" && \
     git config --global user.name "${USER_FULLNAME}" && \
     curl -s https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb && \
-    apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python3.6-venv python3.6-dev python3.7-venv python3.7-dev python2.7-dev python-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python2.7-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync && \
     apt update && \
     curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && \
     chmod a+rx /usr/local/bin/youtube-dl
