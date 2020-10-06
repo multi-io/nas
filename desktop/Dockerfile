@@ -11,9 +11,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN echo y | unminimize && \
+RUN yes | unminimize && \
     apt-get -yy install locales && \
-    locale-gen en_US.UTF-8; locale-gen de_DE.UTF-8 && \
+    locale-gen en_US.UTF-8 && locale-gen de_DE.UTF-8 && \
     mkdir /etc/dma && touch /etc/dma/dma.conf && \
     DEBIAN_FRONTEND=noninteractive apt-get -yy install openssh-server supervisor sudo bash-completion man git etckeeper less vim emacs curl wget links mplayer mencoder jpeginfo imagemagick irssi inetutils-syslogd dma mailutils && \
     groupadd -g ${USER_ID} ${USER_NAME} && \
