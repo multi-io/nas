@@ -27,6 +27,7 @@ RUN yes | unminimize && \
     chmod a+rx /usr/local/bin/youtube-dl
 
 COPY run-sshd.sh /usr/local/bin/run-sshd.sh
+COPY initialize-container.sh /usr/local/bin/initialize-container.sh
 COPY services.conf /etc/supervisor/conf.d/services.conf
 
 CMD ["/usr/bin/supervisord"]
