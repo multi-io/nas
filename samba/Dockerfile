@@ -1,6 +1,10 @@
 FROM debian:stretch
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
+ARG USER_NAME=olaf
+ARG USERID
+ARG GROUPID
+
 # Install samba
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
@@ -16,7 +20,10 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 COPY smb.conf.custom /etc/samba/
 COPY samba.sh /usr/bin/
+# TODO try to avoid having the unencrypted password in this layer in /tmp/password
 COPY data/password /tmp/
+
+RUN samba.sh -u "${USER_NAME};/tmp/password" -s "data;/media/data;yes;no;no;${USER_NAME}" /bin/true && rm -f /tmp/password
 
 EXPOSE 137/udp 138/udp 139 445
 

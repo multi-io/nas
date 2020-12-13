@@ -17,6 +17,7 @@
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
+set -e
 
 ### charmap: setup character mapping for file/directory names
 # Arguments:

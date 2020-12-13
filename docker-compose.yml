@@ -76,24 +76,21 @@ services:
   files:
     build:
       context: ./samba
+      args:
+        USERID: ${USER_ID}
+        GROUPID: ${USERS_GID}
+        USER_NAME: ${USER_NAME}
     image: oklischat/samba
     hostname: ${BASENAME}files
     networks:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.18
     environment:
-      USERID: ${USER_ID}
-      GROUPID: ${USERS_GID}
       TZ: 'CET'
       NMBD: 'true'
     volumes:
       - /home:/home
       - /media:/media
-    command:
-      - '-u'
-      - "${USER_NAME};/tmp/password"
-      - '-s'
-      - "data;/media/data;yes;no;no;${USER_NAME}"
 
   vpn:
     image: kylemanna/openvpn

@@ -3,7 +3,7 @@ run: build
 
 build: # ovpn-config
 	# hack to avoid having the cleartext passwords in committed files:
-	# Makefile decrypts (locally), Dockerfiles uploads, image runtime arguments pass it to samba.sh to create the user
+	# Makefile decrypts (locally), Dockerfile configures it in the image using smbpasswd
 	$(MAKE) -C samba data/password
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
 	./dcompose.sh build $(SVC)
