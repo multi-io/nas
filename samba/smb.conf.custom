@@ -1,3 +1,6 @@
+   # fix for https://www.spinics.net/lists/samba/msg167415.html
+   usershare max shares = 0
+
    security = user
    create mask = 0664
    force create mode = 0664
