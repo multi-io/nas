@@ -7,6 +7,7 @@ ARG USERS_GROUP=users
 ARG USERS_MORE_GROUPS="sudo,dialout"
 ARG USER_FULLNAME="Olaf Klischat"
 ARG USER_EMAIL=olaf@invalid.de
+ARG NODEJS_VERSION=v14.16.1
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
@@ -21,7 +22,12 @@ RUN yes | unminimize && \
     git config --global user.email "${USER_EMAIL}" && \
     git config --global user.name "${USER_FULLNAME}" && \
     curl -s https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python2.7-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python2.7-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync tig && \
+    cd /usr/local/ && \
+    wget https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.gz && \
+    tar xzf node-${NODEJS_VERSION}-linux-x64.tar.gz && \
+    rm -rf node-${NODEJS_VERSION}-linux-x64.tar.gz && \
+    ln -sf $PWD/node-${NODEJS_VERSION}-linux-x64/bin/* bin/ && \
     apt update && \
     curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && \
     chmod a+rx /usr/local/bin/youtube-dl
