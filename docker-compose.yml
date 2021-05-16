@@ -124,6 +124,22 @@ services:
     volumes:
       - prom-tsdb:/prometheus
 
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:v1.1.1
+    hostname: node-exporter
+    command:
+      - --path.rootfs=/host
+      - --collector.systemd
+      - --collector.processes
+      - --collector.filesystem.ignored-mount-points=^/(host)|(dev|proc|sys|var/lib/docker/.+)($$|/)
+      - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$$
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.22
+    volumes:
+      - /:/host:ro
+      - /var/run/dbus:/var/run/dbus:ro
+
   cron:
     build:
       context: ./cron
