@@ -1,0 +1,13 @@
+{
+    "datasources": [
+        {
+            "access": "proxy",
+            "editable": false,
+            "name": "prometheus",
+            "org_id": 1,
+            "type": "prometheus",
+            "url": "http://prom:9090",
+            "version": 1
+        }
+    ]
+}

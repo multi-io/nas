@@ -1,0 +1,11 @@
+[
+    {
+        "folder": "Dashboards",
+        "name": "dashboards",
+        "options": {
+            "path": "/etc/grafana/dashboards/dashboards"
+        },
+        "org_id": 1,
+        "type": "file"
+    }
+]

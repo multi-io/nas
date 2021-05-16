@@ -31,6 +31,8 @@ volumes:
 
   prom-tsdb:
 
+  grafana-storage:
+
 services:
 
   www:
@@ -141,6 +143,17 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run/dbus:/var/run/dbus:ro
+
+  grafana:
+    build:
+      context: ./grafana
+    image: oklischat/grafana
+    hostname: grafana
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.23
+    volumes:
+      - grafana-storage:/var/lib/grafana
 
   cron:
     build:
