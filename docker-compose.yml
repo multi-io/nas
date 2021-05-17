@@ -130,6 +130,7 @@ services:
     image: quay.io/prometheus/node-exporter:v1.1.1
     hostname: node-exporter
     command:
+      - --path.rootfs=/host
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
       - --collector.systemd
@@ -140,8 +141,7 @@ services:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.22
     volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
+      - /:/host:ro
       - /var/run/dbus:/var/run/dbus:ro
 
   grafana:
