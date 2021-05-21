@@ -36,4 +36,6 @@ scrape_configs:
   - job_name: 'tack'
 
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets:
+        - node-exporter:9100
+        - cadvisor:8080

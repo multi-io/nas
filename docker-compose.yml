@@ -144,6 +144,22 @@ services:
       - /:/host:ro
       - /var/run/dbus:/var/run/dbus:ro
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.39.1
+    hostname: cadvisor
+    privileged: true
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.24
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+
   grafana:
     build:
       context: ./grafana
