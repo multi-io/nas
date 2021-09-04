@@ -22,7 +22,7 @@ RUN yes | unminimize && \
     git config --global user.email "${USER_EMAIL}" && \
     git config --global user.name "${USER_FULLNAME}" && \
     curl -s https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python2.7-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync tig && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python2.7-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync tig jq && \
     cd /usr/local/ && \
     wget https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.gz && \
     tar xzf node-${NODEJS_VERSION}-linux-x64.tar.gz && \
