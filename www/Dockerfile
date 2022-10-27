@@ -22,6 +22,7 @@ RUN apt-get update && \
     printf "export APACHE_RUN_USER=${USER_NAME}\nexport APACHE_RUN_GROUP=${USERS_GROUP}\n" >>/etc/apache2/envvars
 
 COPY port80.conf /etc/apache2/sites-available/
+COPY index.html  /var/www/html/
 
 RUN /usr/sbin/a2dissite 000-default && \
     /usr/sbin/a2ensite port80 && \
