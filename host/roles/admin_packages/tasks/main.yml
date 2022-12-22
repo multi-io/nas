@@ -11,4 +11,5 @@
     - bridge-utils
     - traceroute
     - tcpdump
-    #- virtualbox-dkms
+    - libproc-processtable-perl
+    - virtualbox-dkms
