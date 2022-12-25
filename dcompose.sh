@@ -7,4 +7,4 @@ cd "$(dirname $0)"
 set -a
 . ./_getenv.sh
 
-exec docker-compose "$@"
+exec docker-compose -p nas "$@"

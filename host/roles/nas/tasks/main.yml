@@ -1,0 +1,24 @@
+- name: upload repository
+  synchronize:
+    src: "{{ role_path }}/../../../"
+    dest: /usr/local/nas/
+    owner: false
+    delete: yes
+    rsync_opts:
+      - "--exclude=.git"
+      - "--exclude=.idea"
+      - "--exclude=*~"
+
+- name: Upload NAS service definition
+  template:
+    src: files/nas.service
+    dest: /etc/systemd/system/nas.service
+    mode: "0644"
+
+- name: Start NAS service
+  systemd:
+    daemon_reload: true
+    state: started
+    name: nas.service
+    enabled: true
+    no_block: true

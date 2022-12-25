@@ -1,0 +1,15 @@
+[Unit]
+Description=NAS services hosted in docker
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/nas/dcompose.sh up -d --no-build
+ExecReload=/usr/local/nas/dcompose.sh up -d --no-build
+ExecStop=/usr/local/nas/dcompose.sh down
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target
