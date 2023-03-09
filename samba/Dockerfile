@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:bullseye-slim
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_NAME=olaf
