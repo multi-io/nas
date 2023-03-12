@@ -1,6 +1,7 @@
    # fix for https://www.spinics.net/lists/samba/msg167415.html
    usershare max shares = 0
 
+   workgroup = WORKGROUP
    pam password change = yes
    map to guest = bad user
    usershare allow guests = yes
@@ -8,8 +9,8 @@
    force create mode = 0664
    directory mask = 0775
    force directory mode = 0775
-   force user = smbuser
-   force group = smb
+   #force user =
+   #force group =
    follow symlinks = yes
    load printers = no
    printing = bsd

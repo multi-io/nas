@@ -1,17 +1,16 @@
 FROM alpine:3.17.2
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
-ARG USER_NAME=olaf
-ARG USERID
-ARG GROUPID
+ARG USER_NAME
+ARG USER_ID
+ARG USERS_GROUP
+ARG USERS_GID
 
 ENV WORKGROUP=WORKGROUP
 
 # Install samba
 RUN apk --no-cache --no-progress upgrade && \
     apk --no-cache --no-progress add bash samba shadow tini tzdata gettext && \
-    addgroup -S smb && \
-    adduser -S -D -H -h /tmp -s /sbin/nologin -G smb -g 'Samba User' smbuser &&\
     file="/etc/samba/smb.conf" && \
     sed -i 's|^;* *\(log file = \).*|   \1/dev/stdout|' $file && \
     sed -i 's|^;* *\(load printers = \).*|   \1no|' $file && \
@@ -27,16 +26,20 @@ RUN apk --no-cache --no-progress upgrade && \
     rm -rf /tmp/*
 
 COPY smb.conf.custom /tmp/
-RUN cat /tmp/smb.conf.custom | envsubst >/etc/samba/smb.conf.custom
-COPY samba.sh /usr/bin/
 # TODO try to avoid having the unencrypted password in this layer in /tmp/password
 COPY data/password /tmp/
 
-RUN samba.sh -u "${USER_NAME};/tmp/password" /bin/true && rm -f /tmp/password /tmp/smb.conf.custom
+RUN cat /tmp/smb.conf.custom | envsubst >/etc/samba/smb.conf.custom && \
+    passwd="$(cat /tmp/password)" && rm -f "/tmp/password" && \
+    if ! grep -q "^${USERS_GROUP}:" /etc/group; then groupadd "${USERS_GROUP}" -g "${USERS_GID}"; fi && \
+    groupmod -g "${USERS_GID}" "${USERS_GROUP}" && \
+    useradd "${USER_NAME}" -M -u "${USER_ID}" -g "${USERS_GROUP}" && \
+    echo -e "$passwd\n$passwd" | smbpasswd -s -a "${USER_NAME}" && \
+    rm -f /tmp/smb.conf.custom
 
 EXPOSE 137/udp 138/udp 139 445
 
 HEALTHCHECK --interval=60s --timeout=15s \
             CMD smbclient -L \\localhost -U % -m SMB3
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/samba.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/bin/sh", "-c", "exec ionice -c 3 smbd -F --debug-stdout --no-process-group </dev/null"]

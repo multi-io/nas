@@ -79,9 +79,10 @@ services:
     build:
       context: ./samba
       args:
-        USERID: ${USER_ID}
-        GROUPID: ${USERS_GID}
         USER_NAME: ${USER_NAME}
+        USER_ID: ${USER_ID}
+        USERS_GROUP: ${USERS_GROUP}
+        USERS_GID: ${USERS_GID}
     image: oklischat/samba
     hostname: ${BASENAME}files
     networks:
@@ -103,7 +104,7 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - ovpn-config:/etc/openvpn 
+      - ovpn-config:/etc/openvpn
 
   vnc:
     image: oklischat/ubuntu-xfce-vnc:1.5.1
