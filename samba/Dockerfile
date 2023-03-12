@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.17.2
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_NAME=olaf
