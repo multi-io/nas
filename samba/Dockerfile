@@ -5,6 +5,8 @@ ARG USER_NAME=olaf
 ARG USERID
 ARG GROUPID
 
+ENV WORKGROUP=WORKGROUP
+
 # Install samba
 RUN apk --no-cache --no-progress upgrade && \
     apk --no-cache --no-progress add bash samba shadow tini tzdata gettext && \
