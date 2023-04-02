@@ -51,3 +51,10 @@
    read only = no
    guest ok = no
    valid users = ${USER_NAME}
+
+[tm-companylaptop]
+   path = /media/data/time-machine/companylaptop
+   browsable = yes
+   read only = no
+   guest ok = no
+   valid users = ${USER_NAME}
