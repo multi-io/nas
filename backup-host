@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+cd "$(dirname $0)"
+
+backupname="$1"
+
+if [[ -z "$backupname" ]]; then
+    backupname="backup1"
+fi
+
+docker build --tag oklischat/backup backup/
+
+docker run -v /:/host -e "BACKUPNAME=$backupname" oklischat/backup
