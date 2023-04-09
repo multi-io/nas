@@ -6,6 +6,8 @@ build: # ovpn-config
 	# Makefile decrypts (locally), Dockerfile configures it in the image using smbpasswd
 	$(MAKE) -C samba data/password
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
+	# copy backup-host script for the cron container. Docker doesn't accept COPY ../ references or a symlink
+	cp -f ./backup-host cron/
 	./dcompose.sh build $(SVC)
 
 up:
@@ -26,7 +28,7 @@ ovpn-config.tgz:
 	docker volume rm -f $(OVPN_TMPVOL)
 	docker volume create $(OVPN_TMPVOL)
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://$(PUBLIC_HOSTNAME)
-	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki	
+	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full $(VPN_CLIENTNAME) nopass
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -i kylemanna/openvpn /bin/bash -c 'cd /etc/openvpn && tar cz .' >$@
 

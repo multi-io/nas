@@ -1,8 +1,47 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
 
 cd "$(dirname $0)"
+
+usage() {
+    cat >&2 <<-EOS
+usage: `basename $0` [-f] [-n] [-l LEVEL] [BACKUPNAME]
+
+LEVEL is "daily" (default), "weekly" or "monthly". "daily" creates a new daily
+root filesystem backup and a /media/data backup, "weekly" and "monthly" just
+move the oldest daily root fs backup to the newest weekly or the oldest weekly
+to the newest monthly, and don't create a data backup.
+
+-f means run it in the foreground, i.e. docker client logs container's output
+and waits until the container ends. Default is to start the container and exit.
+
+-n means don't try to build the container image, just run the existing image.
+
+BACKUPNAME defaults to "backup1" and refers to the /mnt/BACKUPNAME directory
+to backup to, i.e. essentially the backup drive to backup to.
+EOS
+    exit 1
+}
+
+level=daily
+docker_opts=-d
+build=1
+
+while getopts 'fnl:' OPTNAME; do
+case "$OPTNAME" in
+  "l")
+    level="$OPTARG" ;;
+  "f")
+    docker_opts= ;;
+  "n")
+    build= ;;
+  "?")
+    usage ;;
+esac
+done
+
+shift $(($OPTIND - 1))
 
 backupname="$1"
 
@@ -10,6 +49,8 @@ if [[ -z "$backupname" ]]; then
     backupname="backup1"
 fi
 
-docker build --tag oklischat/backup backup/
+if [[ -n "$build" ]]; then
+  docker build --tag oklischat/backup backup/
+fi
 
-docker run -v /:/host -e "BACKUPNAME=$backupname" oklischat/backup
+docker run $docker_opts --name "backup-$(date --utc +%Y%m%d_%H%M%SZ)" -v /:/host -e "BACKUPNAME=$backupname" -e "LEVEL=$level" oklischat/backup
