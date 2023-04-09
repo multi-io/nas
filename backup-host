@@ -6,7 +6,7 @@ cd "$(dirname $0)"
 
 usage() {
     cat >&2 <<-EOS
-usage: `basename $0` [-f] [-n] [-l LEVEL] [BACKUPNAME]
+usage: `basename $0` [-f] [-n] [-r] [-l LEVEL] [BACKUPNAME]
 
 LEVEL is "daily" (default), "weekly" or "monthly". "daily" creates a new daily
 root filesystem backup and a /media/data backup, "weekly" and "monthly" just
@@ -18,6 +18,9 @@ and waits until the container ends. Default is to start the container and exit.
 
 -n means don't try to build the container image, just run the existing image.
 
+-r means don't run the container, only build the image (unless -n was also
+specified, in which case this script won't do anything)
+
 BACKUPNAME defaults to "backup1" and refers to the /mnt/BACKUPNAME directory
 to backup to, i.e. essentially the backup drive to backup to.
 EOS
@@ -27,8 +30,9 @@ EOS
 level=daily
 docker_opts=-d
 build=1
+run=1
 
-while getopts 'fnl:' OPTNAME; do
+while getopts 'fnrl:' OPTNAME; do
 case "$OPTNAME" in
   "l")
     level="$OPTARG" ;;
@@ -36,6 +40,8 @@ case "$OPTNAME" in
     docker_opts= ;;
   "n")
     build= ;;
+  "r")
+    run= ;;
   "?")
     usage ;;
 esac
@@ -53,4 +59,6 @@ if [[ -n "$build" ]]; then
   docker build --tag oklischat/backup backup/
 fi
 
-docker run $docker_opts --name "backup-$(date --utc +%Y%m%d_%H%M%SZ)" -v /:/host -e "BACKUPNAME=$backupname" -e "LEVEL=$level" oklischat/backup
+if [[ -n "$run" ]]; then
+  docker run $docker_opts --name "backup-${backupname}-${level}-$(date --utc +%Y%m%d_%H%M%SZ)" -v /:/host -e "BACKUPNAME=$backupname" -e "LEVEL=$level" oklischat/backup
+fi

@@ -7,7 +7,7 @@ build: # ovpn-config
 	$(MAKE) -C samba data/password
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
 	# copy backup-host script for the cron container. Docker doesn't accept COPY ../ references or a symlink
-	cp -f ./backup-host cron/
+	if [[ "$(SVC)" = "cron" ]]; then cp -f ./backup-host cron/ && ./backup-host -r; fi
 	./dcompose.sh build $(SVC)
 
 up:
