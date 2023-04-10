@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+backupname="$1"
+host="$2"
+revision="$3"
+time="$4"
+size="$5"
+
+cat <<EOF | curl -XPOST --data-binary @- "http://pushgateway:9091/metrics/job/backups/backupname/$backupname/host/$host/revision/$revision"
+# TYPE backup_size_bytes gauge
+# HELP size of a created backup
+backup_size_bytes $size
+# TYPE backup_creation_time_seconds gauge
+# HELP backup_creation_time_seconds timestamp when a backup was created
+backup_creation_time_seconds $time
+EOF
+
+# TODO do we need the timestamp metric or can we just take the time of the size metric?
