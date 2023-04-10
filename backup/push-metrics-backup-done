@@ -12,9 +12,7 @@ cat <<EOF | curl -XPOST --data-binary @- "http://pushgateway:9091/metrics/job/ba
 # TYPE backup_size_bytes gauge
 # HELP size of a created backup
 backup_size_bytes $size
-# TYPE backup_creation_time_seconds gauge
-# HELP backup_creation_time_seconds timestamp when a backup was created
-backup_creation_time_seconds $time
 EOF
 
-# TODO do we need the timestamp metric or can we just take the time of the size metric?
+# for the time of the last backup, use the push gateway's "push_time_seconds" metric, e.g.
+# push_time_seconds{job="backups",backupname="backup1",host="tack",revision="daily.0"}
