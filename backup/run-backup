@@ -15,11 +15,13 @@ tmpdir="$(mktemp -d)"
 trap "rm -rf $tmpdir" EXIT
 
 if [[ "$LEVEL" = "daily" ]]; then
-  /usr/bin/nice /usr/bin/nocache /usr/bin/rsnapshot -c /rsnapshot.conf sync && /usr/bin/nice /usr/bin/nocache /usr/bin/rsnapshot -c /rsnapshot.conf daily
-  /push-metrics-backup-done $BACKUPNAME $host daily.0 $(date +%s) 99999  # TODO find out real backup size from rsync output, like below for data
-  # TODO also set daily.N metrics (N>=1) to previous daily.(N-1) values
+  /usr/bin/nice /usr/bin/nocache /usr/bin/rsnapshot -c /rsnapshot.conf sync | tee "$tmpdir/rootfs-rsync"
+  /usr/bin/nice /usr/bin/nocache /usr/bin/rsnapshot -c /rsnapshot.conf daily
+  # don't want to run "du" over the backup dir just to find out the size, so grep it out of rsync's output instead
+  size=$(cat "$tmpdir/rootfs-rsync" | perl -ne '/total size is (.*?) / && print $1' | sed 's/,//g')
+  /push-metrics-backup-done $BACKUPNAME $host daily.0 $(date +%s) $size
+  # TODO before pushing new metrics, push metrics update that sets daily.N metrics (N>=1) to previous daily.(N-1) values
 
-  # TODO lock file
   date '+[%d/%b/%Y:%H:%M:%S] starting data backup'
   /usr/bin/nice /usr/bin/nocache /usr/bin/rsync -v -a --numeric-ids "/host/media/data/" "/host/mnt/$BACKUPNAME/${host}/data/" | tee "$tmpdir/data-rsync"
   size=$(cat "$tmpdir/data-rsync" | perl -ne '/^total size is (.*?) / && print $1' | sed 's/,//g')
