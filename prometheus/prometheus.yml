@@ -38,3 +38,9 @@ scrape_configs:
       - targets:
         - node-exporter:9100
         - cadvisor:8080
+
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets:
+          - pushgateway:9091

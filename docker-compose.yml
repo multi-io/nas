@@ -33,6 +33,8 @@ volumes:
 
   grafana-storage:
 
+  pushgateway-storage:
+
 services:
 
   www:
@@ -160,6 +162,16 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+
+  pushgateway:
+    image: prom/pushgateway
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.25
+    command:
+      - --persistence.file=/var/lib/pushgateway/data
+    volumes:
+      - pushgateway-storage:/var/lib/pushgateway
 
   grafana:
     build:
