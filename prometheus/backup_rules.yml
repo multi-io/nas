@@ -1,0 +1,21 @@
+groups:
+  - name: backup_alerts
+    rules:
+
+      - alert: BackupsLastLocalBackupTooOld
+        expr: absent(push_time_seconds{job="backups",backupname="backup1",host="tack"}) or (time() - push_time_seconds{job="backups",backupname="backup1",host="tack"} > 100800)  # 28 hours
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          title: Latest local backup ({{ $labels.backupname }}) is too old
+          description: Latest local backup ({{ $labels.backupname }}) is {{ $value }} seconds old. (or missing if the value is 1)
+
+      - alert: BackupsLastOffsiteBackupTooOld
+        expr: absent(push_time_seconds{job="backups",backupname="backup2",host="tack"}) or (time() - push_time_seconds{job="backups",backupname="backup2",host="tack"} > 2592000)  # 1 month
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          title: Latest local off-site backup ({{ $labels.backupname }}) is too old
+          description: Latest local off-site backup ({{ $labels.backupname }}) is {{ $value }} seconds old. (or missing if the value is 1)
