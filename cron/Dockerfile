@@ -17,5 +17,7 @@ COPY hostbackup-monthly /etc/cron.monthly/hostbackup
 
 COPY backup-host /usr/local/bin/
 
+COPY docker-prune /etc/cron.daily/
+
 ENTRYPOINT ["/usr/sbin/cron"]
 CMD ["-f"]

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -e
+
+# delete older stopped containers and unused images
+docker container prune -f --filter "until=1440h"  # 60 days
+docker image prune -f --filter "until=96h"        # 4 days
