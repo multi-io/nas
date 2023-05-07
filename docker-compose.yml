@@ -39,6 +39,8 @@ volumes:
 
   gitlab-log:
 
+  gitlab-runner-config:
+
 services:
 
   www:
@@ -209,6 +211,17 @@ services:
       - gitlab-storage:/var/opt/gitlab
       - gitlab-log:/var/log/gitlab
     # TODO: disable prometheus & alertmanager...
+
+  gitlabrunner:
+    image: gitlab/gitlab-runner:latest
+    hostname: gitlabrunner
+    privileged: true
+    networks:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.27
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - gitlab-runner-config:/etc/gitlab-runner
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
