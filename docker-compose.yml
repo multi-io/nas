@@ -204,13 +204,16 @@ services:
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'http://gitlab.home.olaflocal'
+        prometheus['enable'] = false
+        alertmanager['enable'] = false
+        node_exporter['enable'] = false
     networks:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.26
     volumes:
       - gitlab-storage:/var/opt/gitlab
       - gitlab-log:/var/log/gitlab
-    # TODO: disable prometheus & alertmanager...
+    # TODO: disable nginx...
 
   gitlabrunner:
     image: gitlab/gitlab-runner:latest
