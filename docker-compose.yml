@@ -207,6 +207,11 @@ services:
         prometheus['enable'] = false
         alertmanager['enable'] = false
         node_exporter['enable'] = false
+        gitlab_kas['enable'] = false
+        sidekiq['listen_address'] = "0.0.0.0"
+        redis_exporter['listen_address'] = '0.0.0.0:9121'
+        postgres_exporter['listen_address'] = '0.0.0.0:9187'
+        gitlab_exporter['listen_address'] = '0.0.0.0'
     networks:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.26
