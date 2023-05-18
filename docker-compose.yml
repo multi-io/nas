@@ -171,6 +171,7 @@ services:
 
   pushgateway:
     image: prom/pushgateway
+    user: root
     networks:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.25
