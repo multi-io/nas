@@ -8,6 +8,7 @@
       - "--exclude=.git"
       - "--exclude=.idea"
       - "--exclude=*~"
+  notify: Reload NAS
 
 - name: Upload NAS service definition
   template:
