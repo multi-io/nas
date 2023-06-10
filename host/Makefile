@@ -1,7 +1,7 @@
-INVENTORY=hosts.vagrant
+INVENTORY=hosts.tack
 ANSIBLE_PARAMS=
 
-setup_user create_and_setup_user setup_host setup_host_without_user admin_packages debian_base dockerd:
+%: %.yml
 	ansible-playbook $(ANSIBLE_PARAMS) -i $(INVENTORY) $@.yml
 
 create_vagrant_machine:
