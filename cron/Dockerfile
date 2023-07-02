@@ -8,8 +8,11 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update && apt-get -yy upgrade && \
     apt-get -yy install locales && \
     locale-gen en_US.UTF-8; locale-gen de_DE.UTF-8 && \
-    apt-get -yy install cron docker.io && \
+    apt-get -yy install cron docker.io curl && \
     rm -rf /etc/cron.*/*
+
+COPY crontab /etc/crontab
+COPY run-monitored /usr/local/bin
 
 COPY hostbackup-daily /etc/cron.daily/hostbackup
 COPY hostbackup-weekly /etc/cron.weekly/hostbackup
