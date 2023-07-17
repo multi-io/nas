@@ -19,11 +19,7 @@
    strict locking = no
    aio read size = 0
    aio write size = 0
-   vfs objects = catia fruit recycle streams_xattr
-   recycle:keeptree = yes
-   recycle:maxsize = 0
-   recycle:repository = .deleted
-   recycle:versions = yes
+   vfs objects = catia fruit streams_xattr
 
    # Security
    client ipc max protocol = SMB3
