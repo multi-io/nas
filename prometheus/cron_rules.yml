@@ -1,0 +1,12 @@
+groups:
+  - name: cron_alerts
+    rules:
+
+      - alert: CronScriptFailure
+        expr: cron_script_exit_code != 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          title: Cron job {{ $labels.script }} failed
+          description: Cron job {{ $labels.dir }}/{{ $labels.script }} failed with exit code {{ $value }}
