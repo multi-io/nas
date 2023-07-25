@@ -60,5 +60,5 @@ if [[ -n "$build" ]]; then
 fi
 
 if [[ -n "$run" ]]; then
-  docker run $docker_opts --network nas_pubnet --name "backup-${backupname}-${level}-$(date --utc +%Y%m%d_%H%M%SZ)" -v /:/host -e "BACKUPNAME=$backupname" -e "LEVEL=$level" oklischat/backup
+  docker run $docker_opts --network nas_privnet --name "backup-${backupname}-${level}-$(date --utc +%Y%m%d_%H%M%SZ)" -v /:/host -e "BACKUPNAME=$backupname" -e "LEVEL=$level" oklischat/backup
 fi

@@ -3,6 +3,9 @@ version: '2'
 
 networks:
 
+  privnet:
+    driver: bridge
+
   pubnet:
     driver: macvlan
     ipam:
@@ -53,6 +56,7 @@ services:
     image: oklischat/wwwpublish
     hostname: ${BASENAME}www
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.17
     volumes:
@@ -72,6 +76,7 @@ services:
     hostname: ${BASENAME}d
     privileged: true
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.16
     volumes:
@@ -94,6 +99,7 @@ services:
     image: oklischat/samba
     hostname: ${BASENAME}files
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.18
     environment:
@@ -107,6 +113,7 @@ services:
     image: kylemanna/openvpn
     hostname: ${BASENAME}vpn
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.19
     cap_add:
@@ -118,6 +125,7 @@ services:
     image: oklischat/ubuntu-xfce-vnc:1.5.1
     hostname: ${BASENAME}vnc
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.20
     volumes:
@@ -130,6 +138,7 @@ services:
     image: oklischat/prometheus
     hostname: prom
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.21
     volumes:
@@ -147,6 +156,7 @@ services:
       - --collector.filesystem.ignored-mount-points=^/(host)|(dev|proc|sys|var/lib/docker/.+)($$|/)
       - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$$
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.22
     volumes:
@@ -158,6 +168,7 @@ services:
     hostname: cadvisor
     privileged: true
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.24
     devices:
@@ -173,8 +184,7 @@ services:
     image: prom/pushgateway
     user: root
     networks:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.25
+      privnet:
     command:
       - --persistence.file=/var/lib/pushgateway/data
     volumes:
@@ -186,6 +196,7 @@ services:
     image: oklischat/grafana
     hostname: grafana
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.23
     volumes:
@@ -196,6 +207,8 @@ services:
       context: ./cron
     image: oklischat/cron
     hostname: ${BASENAME}-cron
+    networks:
+      privnet:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -214,6 +227,7 @@ services:
         postgres_exporter['listen_address'] = '0.0.0.0:9187'
         gitlab_exporter['listen_address'] = '0.0.0.0'
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.26
     volumes:
@@ -226,6 +240,7 @@ services:
     hostname: gitlabrunner
     privileged: true
     networks:
+      privnet:
       pubnet:
         ipv4_address: ${LAN_SUBNET}.27
     volumes:
