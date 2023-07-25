@@ -14,7 +14,7 @@ find "$dir" -mindepth 1 -maxdepth 1 -type f -regex '.*/[a-zA-Z0-9_-]+' -perm -u=
     "$script"
     ec="$?"
 
-    cat <<EOF | curl -s -XPOST --data-binary @- "http://pushgateway:9091/metrics/job/cron/dir/$dir/script/$script"
+    cat <<EOF | curl -s -XPOST --data-binary @- "http://pushgateway:9091/metrics/job/cron/dir@base64/$(base64 <<<$dir)/script@base64/$(basename $script | base64)"
 # TYPE cron_script_exit_code gauge
 # HELP exit code of cron script run
 cron_script_exit_code $ec
