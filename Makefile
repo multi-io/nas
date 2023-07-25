@@ -32,6 +32,9 @@ ovpn-config.tgz:
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full $(VPN_CLIENTNAME) nopass
 	docker run -v $(OVPN_TMPVOL):/etc/openvpn --rm -i kylemanna/openvpn /bin/bash -c 'cd /etc/openvpn && tar cz .' >$@
 
+hostinstall:
+	$(MAKE) -C host nas
+
 _rm-ovpn-config:
 	docker volume rm -f ovpn-config
 	rm -f ovpn-config.tgz $(VPN_CLIENTNAME).ovpn
