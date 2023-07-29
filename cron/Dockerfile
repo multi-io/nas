@@ -12,15 +12,11 @@ RUN apt-get update && apt-get -yy upgrade && \
     rm -rf /etc/cron.*/*
 
 COPY crontab /etc/crontab
-COPY run-monitored /usr/local/bin
+COPY daily/* /etc/cron.daily/
+COPY weekly/* /etc/cron.weekly/
+COPY monthly/* /etc/cron.monthly/
 
-COPY hostbackup-daily /etc/cron.daily/hostbackup
-COPY hostbackup-weekly /etc/cron.weekly/hostbackup
-COPY hostbackup-monthly /etc/cron.monthly/hostbackup
-
-COPY backup-host /usr/local/bin/
-
-COPY docker-prune /etc/cron.daily/
+COPY run-monitored backup-host /usr/local/bin/
 
 ENTRYPOINT ["/usr/sbin/cron"]
 CMD ["-f"]
