@@ -18,5 +18,5 @@ COPY monthly/* /etc/cron.monthly/
 
 COPY run-monitored backup-host /usr/local/bin/
 
-ENTRYPOINT ["/usr/sbin/cron"]
-CMD ["-f"]
+# pass the container environment to the cronjobs via /etc/environment
+CMD set >>/etc/environment && exec /usr/sbin/cron -f

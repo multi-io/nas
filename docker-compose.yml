@@ -44,6 +44,8 @@ volumes:
 
   gitlab-runner-config:
 
+  tlscert:
+
 services:
 
   www:
@@ -210,6 +212,11 @@ services:
     hostname: ${BASENAME}-cron
     networks:
       privnet:
+    environment:
+      LAN_DNS_SUFFIX: $LAN_DNS_SUFFIX
+      ROUTE53_ACCESS_KEY_ID: $ROUTE53_ACCESS_KEY_ID
+      ROUTE53_SECRET_ACCESS_KEY: $ROUTE53_SECRET_ACCESS_KEY
+      LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
