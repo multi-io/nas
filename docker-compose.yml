@@ -94,6 +94,7 @@ services:
       args:
         USER_NAME: ${USER_NAME}
         USER_ID: ${USER_ID}
+        USER_PASSWORD: ${SMB_PASSWORD}
         USERS_GROUP: ${USERS_GROUP}
         USERS_GID: ${USERS_GID}
     image: oklischat/samba

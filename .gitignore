@@ -3,3 +3,4 @@
 /.idea
 .DS_Store
 /host/roles/dockerd/out/
+/.git-myconfig/

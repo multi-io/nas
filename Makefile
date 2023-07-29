@@ -1,10 +1,7 @@
 run: build
-	./dcompose.sh up -d --build $(SVC); $(MAKE) -C samba clean
+	./dcompose.sh up -d --build $(SVC)
 
 build: # ovpn-config
-	# hack to avoid having the cleartext passwords in committed files:
-	# Makefile decrypts (locally), Dockerfile configures it in the image using smbpasswd
-	$(MAKE) -C samba data/password
 	set -a; . ./_getenv.sh && $(MAKE) ovpn-config
 	# copy backup-host script for the cron container. Docker doesn't accept COPY ../ references or a symlink
 	if [[ "$(SVC)" = "cron" || -z "$(SVC)" ]]; then cp -f ./backup-host cron/ && ./backup-host -r; fi
