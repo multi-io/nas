@@ -225,7 +225,11 @@ services:
     hostname: gitlab
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.home.olaflocal'
+        external_url "https://gitlab.${LAN_DNS_SUFFIX}"
+        letsencrypt['enable'] = false
+        nginx['ssl_certificate'] = "/var/opt/tlscert/live/${LAN_DNS_SUFFIX}/fullchain.pem"
+        nginx['ssl_certificate_key'] = "/var/opt/tlscert/live/${LAN_DNS_SUFFIX}/privkey.pem"
+        nginx['redirect_http_to_https'] = true
         prometheus['enable'] = false
         alertmanager['enable'] = false
         node_exporter['enable'] = false
@@ -241,6 +245,7 @@ services:
     volumes:
       - gitlab-storage:/var/opt/gitlab
       - gitlab-log:/var/log/gitlab
+      - tlscert:/var/opt/tlscert
     # TODO: disable nginx...
 
   gitlabrunner:
