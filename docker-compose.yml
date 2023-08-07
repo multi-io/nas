@@ -40,6 +40,8 @@ volumes:
 
   gitlab-storage:
 
+  gitlab-etc:
+
   gitlab-log:
 
   gitlab-runner-config:
@@ -244,6 +246,7 @@ services:
         ipv4_address: ${LAN_SUBNET}.26
     volumes:
       - gitlab-storage:/var/opt/gitlab
+      - gitlab-etc:/etc/gitlab
       - gitlab-log:/var/log/gitlab
       - tlscert:/var/opt/tlscert
     # TODO: disable nginx...
