@@ -50,6 +50,18 @@ volumes:
 
 services:
 
+  proxy:
+    build:
+      context: ./proxy
+    networks:
+      privnet:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.28
+    environment:
+      LAN_DNS_SUFFIX: $LAN_DNS_SUFFIX
+    volumes:
+      - tlscert:/var/opt/tlscert
+
   www:
     build:
       context: ./www
@@ -61,8 +73,6 @@ services:
     hostname: ${BASENAME}www
     networks:
       privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.17
     volumes:
       - /home:/home:ro
       - /media:/media:ro

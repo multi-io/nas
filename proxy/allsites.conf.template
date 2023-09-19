@@ -1,0 +1,27 @@
+ssl_certificate     /var/opt/tlscert/live/${LAN_DNS_SUFFIX}/fullchain.pem;
+ssl_certificate_key /var/opt/tlscert/live/${LAN_DNS_SUFFIX}/privkey.pem;
+
+server {
+    listen 80 default_server;
+
+    server_name _;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen      443 ssl;
+    server_name tackwww.${LAN_DNS_SUFFIX};
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass      http://tackwww:80;
+        # TODO fetching some https url without a / at the end
+        # redirects to the corresponding http:// (NOT https://)
+        # URL with a slash at the end. (this will then be redirected
+        # to the https://..../ URL via the default_server config above,
+        # but still we don't want the intermediary redirect to
+        # an unencrypted URL)
+    }
+}
