@@ -154,8 +154,6 @@ services:
     hostname: prom
     networks:
       privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.21
     volumes:
       - prom-tsdb:/prometheus
 

@@ -16,6 +16,8 @@ server {
     location / {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Forwarded host=$host,proto=https;
+        proxy_set_header X-Forwarded-Proto https;
         proxy_pass      http://tackwww:80;
         # TODO fetching some https url without a / at the end
         # redirects to the corresponding http:// (NOT https://)
@@ -23,5 +25,18 @@ server {
         # to the https://..../ URL via the default_server config above,
         # but still we don't want the intermediary redirect to
         # an unencrypted URL)
+    }
+}
+
+server {
+    listen      443 ssl;
+    server_name prom.${LAN_DNS_SUFFIX};
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Forwarded host=$host,proto=https;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_pass      http://prometheus:9090;
     }
 }
