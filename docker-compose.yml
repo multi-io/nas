@@ -170,8 +170,6 @@ services:
       - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$$
     networks:
       privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.22
     volumes:
       - /:/host:ro
       - /var/run/dbus:/var/run/dbus:ro
