@@ -40,3 +40,16 @@ server {
         proxy_pass      http://prometheus:9090;
     }
 }
+
+server {
+    listen      443 ssl;
+    server_name grafana.${LAN_DNS_SUFFIX};
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Forwarded host=$host,proto=https;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_pass      http://grafana:3000;
+    }
+}

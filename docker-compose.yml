@@ -208,8 +208,6 @@ services:
     hostname: grafana
     networks:
       privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.23
     volumes:
       - grafana-storage:/var/lib/grafana
 
