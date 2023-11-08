@@ -18,7 +18,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Forwarded host=$host,proto=https;
         proxy_set_header X-Forwarded-Proto https;
-        proxy_pass      http://tackwww:80;
+        proxy_pass      http://www:80;
         # TODO fetching some https url without a / at the end
         # redirects to the corresponding http:// (NOT https://)
         # URL with a slash at the end. (this will then be redirected
