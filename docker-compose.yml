@@ -180,8 +180,6 @@ services:
     privileged: true
     networks:
       privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.24
     devices:
       - /dev/kmsg:/dev/kmsg
     volumes:
