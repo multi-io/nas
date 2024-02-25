@@ -10,3 +10,16 @@ groups:
         annotations:
           title: Cron job {{ $labels.script }} failed
           description: Cron job {{ $labels.dir }}/{{ $labels.script }} failed with exit code {{ $value }}
+
+      - alert: CronJobOverdue
+        expr: |
+          time() - push_time_seconds{job="cron",dir="/etc/cron.daily\n"} > 24*60*60 or
+          time() - push_time_seconds{job="cron",dir="/etc/cron.weekly\n"} > 7*24*60*60 or
+          time() - push_time_seconds{job="cron",dir="/etc/cron.monthly\n"} > 31*24*60*60 or
+          time() - push_time_seconds{job="cron-tackd"} > 24*60*60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          title: Cron job {{ $labels }} overdue
+          description: Cron job {{ $labels }} last ran {{ $value }} seconds ago
