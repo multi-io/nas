@@ -27,6 +27,8 @@ volumes:
 
   desktop_mail_spool:
 
+  desktop_mlocate_db:
+
   desktop_log:
 
   ovpn-config:
@@ -97,6 +99,7 @@ services:
       - desktop_etc_ssh:/etc/ssh
       - desktop_cron_spool:/var/spool/cron
       - desktop_mail_spool:/var/spool/mail
+      - desktop_mlocate_db:/var/lib/mlocate
       - desktop_log:/var/log
       - /home:/home
       - /media:/media
