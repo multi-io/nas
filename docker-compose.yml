@@ -226,6 +226,7 @@ services:
       LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - tlscert:/etc/letsencrypt
 
   gitlab:
     image: gitlab/gitlab-ee:15.11.0-ee.0

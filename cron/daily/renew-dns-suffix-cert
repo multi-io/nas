@@ -1,8 +1,17 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-exec docker run \
+set -e
+
+touch /tmp/before
+
+docker run \
   --name "renew-dns-suffix-cert-$(date --utc +%Y%m%d_%H%M%SZ)" \
   -e AWS_ACCESS_KEY_ID="${ROUTE53_ACCESS_KEY_ID}" \
   -e AWS_SECRET_ACCESS_KEY="${ROUTE53_SECRET_ACCESS_KEY}" \
   -v nas_tlscert:/etc/letsencrypt \
-  certbot/dns-route53:v2.6.0 certonly --dns-route53 --noninteractive -m "${LETSENCRYPT_EMAIL}" --agree-tos -d "*.${LAN_DNS_SUFFIX}"
+  certbot/dns-route53:v2.6.0 certonly --dns-route53 --noninteractive -m "${LETSENCRYPT_EMAIL}" --agree-tos -d "*.${LAN_DNS_SUFFIX}" --post-hook 'touch /etc/letsencrypt/renewed'
+
+if [[ -f /etc/letsencrypt/renewed && ! /etc/letsencrypt/renewed -ot /tmp/before ]]; then
+    docker restart nas-proxy-1
+    docker restart nas-gitlab-1
+fi
