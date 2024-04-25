@@ -2,16 +2,16 @@
 
 set -e
 
-touch /tmp/before
-
 docker run \
   --name "renew-dns-suffix-cert-$(date --utc +%Y%m%d_%H%M%SZ)" \
   -e AWS_ACCESS_KEY_ID="${ROUTE53_ACCESS_KEY_ID}" \
   -e AWS_SECRET_ACCESS_KEY="${ROUTE53_SECRET_ACCESS_KEY}" \
   -v nas_tlscert:/etc/letsencrypt \
-  certbot/dns-route53:v2.6.0 certonly --dns-route53 --noninteractive -m "${LETSENCRYPT_EMAIL}" --agree-tos -d "*.${LAN_DNS_SUFFIX}" --post-hook 'touch /etc/letsencrypt/renewed'
+  certbot/dns-route53:v2.6.0 certonly --dns-route53 --noninteractive -m "${LETSENCRYPT_EMAIL}" --agree-tos -d "*.${LAN_DNS_SUFFIX}"
 
-if [[ -f /etc/letsencrypt/renewed && ! /etc/letsencrypt/renewed -ot /tmp/before ]]; then
-    docker restart nas-proxy-1
-    docker restart nas-gitlab-1
-fi
+# just reload the nginxes every time to catch cert renewals.
+# could use certbot --post-hook, which only runs if it was actually renewed,
+# but that would then require docker in the certbot container or
+# working with touching files and comparing timestamps
+docker exec nas-gitlab-1 killall -HUP nginx
+docker exec nas-proxy-1 nginx -s reload
