@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_ID=1000
@@ -18,7 +18,7 @@ RUN apt-get update && \
     locale-gen en_US.UTF-8 && locale-gen de_DE.UTF-8 && update-locale LANG=en_US.UTF-8 && \
     apt-get -yy upgrade && \
     apt-get -yy install apache2 && \
-    useradd -u $USER_ID -d /home/olaf -g users -G www-data $USER_NAME && \
+    userdel -f ubuntu && useradd -u $USER_ID -d /home/olaf -g users -G www-data $USER_NAME && \
     printf "export APACHE_RUN_USER=${USER_NAME}\nexport APACHE_RUN_GROUP=${USERS_GROUP}\n" >>/etc/apache2/envvars
 
 COPY port80.conf /etc/apache2/sites-available/

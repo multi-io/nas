@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ENV LANG en_US.UTF-8
