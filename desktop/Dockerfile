@@ -24,15 +24,13 @@ RUN yes | unminimize && \
     git config --global user.name "${USER_FULLNAME}" && \
     perl -i -ne 'if (/^PRUNEPATHS=/) { s!/media *!!; }; print' /etc/updatedb.conf && \
     curl -s https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb >/tmp/vagrant.deb && dpkg -i /tmp/vagrant.deb && rm -f /tmp/vagrant.deb && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat-openbsd dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync tig jq ripgrep fzf dnsutils webp && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yy install ruby ruby-dev g++ bc lsb-release make gcc net-tools tmux iputils-ping iputils-arping iputils-tracepath tcpdump whois netcat-openbsd dialog virtualbox gnupg dirmngr docker.io unrar cu irssi ffmpeg virtualenv python3-venv python3-dev python3-gnuplot psmisc iptraf nethogs libpcap-dev nmap apt-file mkvtoolnix strace lsof rsync tig jq ripgrep fzf dnsutils webp file dlocate && \
     cd /usr/local/ && \
     wget https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.gz && \
     tar xzf node-${NODEJS_VERSION}-linux-x64.tar.gz && \
     rm -rf node-${NODEJS_VERSION}-linux-x64.tar.gz && \
     ln -sf $PWD/node-${NODEJS_VERSION}-linux-x64/bin/* bin/ && \
-    apt update && \
-    curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && \
-    chmod a+rx /usr/local/bin/youtube-dl
+    apt update
 
 COPY run-sshd.sh /usr/local/bin/run-sshd.sh
 COPY initialize-container.sh /usr/local/bin/initialize-container.sh
