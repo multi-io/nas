@@ -50,6 +50,8 @@ volumes:
 
   tlscert:
 
+  jellyfin-config:
+
 services:
 
   proxy:
@@ -267,6 +269,24 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - gitlab-runner-config:/etc/gitlab-runner
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:10.9.7
+    environment:
+      TZ: 'CET'
+      PUID: ${USER_ID}
+      PGID: ${USERS_GID}
+      #JELLYFIN_PublishedServerUrl: ${LAN_SUBNET}.29
+    networks:
+      privnet:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.29
+    restart: unless-stopped
+    volumes:
+      - jellyfin-config:/config
+      - /home:/home
+      - /media:/media
+      - tlscert:/var/opt/tlscert
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
