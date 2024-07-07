@@ -276,9 +276,12 @@ services:
       TZ: 'CET'
       PUID: ${USER_ID}
       PGID: ${USERS_GID}
-      #JELLYFIN_PublishedServerUrl: ${LAN_SUBNET}.29
+      # URL of own HTTP endpoint the server reports on UDP "Who is JellyfinServer?" broadcast
+      JELLYFIN_PublishedServerUrl: https://jellyfin.${LAN_DNS_SUFFIX}
     networks:
       privnet:
+      # pubnet IP needed for UDP 'Who is JellyfinServer?' broadcast, possibly for DLNA too
+      # TODO does DLNA support only HTTP? In that case DLNA clients would also have to use the .29 IP, port 8096
       pubnet:
         ipv4_address: ${LAN_SUBNET}.29
     restart: unless-stopped
