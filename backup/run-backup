@@ -9,7 +9,8 @@ if [[ -z "$BACKUPNAME" ]]; then
   exit 1
 fi
 
-mkdir -p "/host/mnt/$BACKUPNAME/${host}"
+# don't create root directory of the backup; require it to exist
+#mkdir -p "/host/mnt/$BACKUPNAME/${host}"
 
 sed -i "s/^snapshot_root.*/snapshot_root\t\/host\/mnt\/${BACKUPNAME}\/${host}\//" /rsnapshot.conf
 
