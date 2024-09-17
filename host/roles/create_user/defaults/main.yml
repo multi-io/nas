@@ -1,7 +1,8 @@
 ---
 
-username: oklischat
-full_name: Olaf Klischat
+username: someuser
+full_name: Some User
+password: somepw
 
 primary_group: users
 other_groups: sudo,src

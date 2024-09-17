@@ -1,20 +1,12 @@
 ---
 
-- hosts: all
+- name: Setup host and create user
+  hosts: all
   remote_user: "{{ sudo_user }}"
   become: true
 
   vars:
-    username: olaf
     primary_group: users
-  
-  vars_prompt:  # TODO: when: create_user
-    - name: "password"
-      prompt: "Enter password (only used if a user is created)"
-      private: yes
-      encrypt: "sha512_crypt"
-      confirm: yes
-      salt_size: 7
 
   roles:
     - debian_base
@@ -23,7 +15,8 @@
     - admin_packages
     - nas
 
-- hosts: all
+- name: Setup user
+  hosts: all
   remote_user: "{{ username }}"
   roles:
     - setup_user

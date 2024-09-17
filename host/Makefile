@@ -1,8 +1,10 @@
 INVENTORY=hosts.tack
 ANSIBLE_PARAMS=
 
+default: setup_host
+
 %: %.yml
-	ansible-playbook $(ANSIBLE_PARAMS) -i $(INVENTORY) $@.yml
+	./run-playbook $(ANSIBLE_PARAMS) -i $(INVENTORY) $@.yml
 
 create_vagrant_machine:
 	vagrant up

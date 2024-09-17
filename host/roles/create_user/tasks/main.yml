@@ -15,7 +15,7 @@
     shell: "/bin/bash"
     group: "{{primary_group}}"
     groups: "{{other_groups}}"
-    password: "{{password}}"
+    password: "{{password | password_hash('sha512')}}"
 
 - name: "create user's initial .ssh/"
   file: path="~{{username}}/.ssh" state=directory owner="{{username}}" group="{{primary_group}}"
