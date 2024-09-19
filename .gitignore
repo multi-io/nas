@@ -1,6 +1,7 @@
 *~
 /samba/data/password
 /.idea
+/.vscode
 .DS_Store
 /host/roles/dockerd/out/
 /.git-myconfig/

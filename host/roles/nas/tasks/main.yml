@@ -5,8 +5,9 @@
     owner: false
     delete: yes
     rsync_opts:
-      - "--exclude=.git"
+      - "--exclude=.git*"
       - "--exclude=.idea"
+      - "--exclude=.vscode"
       - "--exclude=*~"
   notify: Reload NAS
 

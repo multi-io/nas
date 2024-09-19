@@ -9,7 +9,7 @@ RemainAfterExit=yes
 ExecStart=/usr/local/nas/dcompose.sh up -d --no-build
 ExecReload=/usr/local/nas/dcompose.sh up -d --no-build
 ExecStop=/usr/local/nas/dcompose.sh down
-TimeoutSec=30
+TimeoutSec=90
 
 [Install]
 WantedBy=multi-user.target
