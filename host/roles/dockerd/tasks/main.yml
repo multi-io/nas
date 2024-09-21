@@ -49,7 +49,7 @@
   notify: restart docker
   when: dockerd.remote_access.enabled
 
-- name: upload server certificate and key
+- name: upload docker daemon configuration
   copy: src=files/daemon-tls.conf dest=/etc/systemd/system/docker.service.d/
   notify: restart docker
   when: dockerd.remote_access.enabled
@@ -60,6 +60,6 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
-      - docker-compose
+      - docker-compose-plugin
     state: present
     update_cache: yes
