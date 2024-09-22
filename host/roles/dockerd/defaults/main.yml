@@ -3,5 +3,7 @@ dockerd:
     enabled: yes
     cert:
       #hostname: docker.host.name
-      alt_names: ''
+      alt_names: 'DNS:{{inventory_hostname}}'
       valid_days: 3650
+
+dockerd_certs_renew_now: false

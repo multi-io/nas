@@ -1,5 +1,11 @@
 # TODO try to use openssl* modules with with_items
 
+- name: remove CA and certificates locally
+  when: dockerd_certs_renew_now
+  delegate_to: localhost
+  become: false
+  shell: "rm -rf {{ role_path }}/out/{{inventory_hostname}}/*"
+
 - name: create CA cert and key
   delegate_to: localhost
   become: false

@@ -1,0 +1,9 @@
+- name: Renew Docker certificates
+  hosts: all
+  remote_user: "{{ sudo_user }}"
+  become: true
+
+  roles:
+    - role: dockerd
+      vars:
+        dockerd_certs_renew_now: true
