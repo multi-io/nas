@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.10
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_ID=1000
@@ -7,12 +7,14 @@ ARG USERS_GROUP=users
 ARG USERS_MORE_GROUPS="sudo,dialout"
 ARG USER_FULLNAME="Olaf Klischat"
 ARG USER_EMAIL=olaf@invalid.de
-ARG NODEJS_VERSION=v16.1.0
+ARG NODEJS_VERSION=v23.5.0
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN yes | unminimize && \
+RUN apt update && \
+    apt install -yy unminimize && \
+    yes | unminimize && \
     apt-get -yy install locales && \
     locale-gen en_US.UTF-8 && locale-gen de_DE.UTF-8 && \
     mkdir /etc/dma && touch /etc/dma/dma.conf && \
