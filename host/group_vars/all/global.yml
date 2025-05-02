@@ -1,5 +1,5 @@
-debian_snapshot: 20191004T203900Z
-debian_release: buster
+debian_snapshot: 20250502T082704Z
+debian_release: bullseye
 #debian_fallback_release: experimental
 
 create_user: yes
