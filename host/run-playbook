@@ -5,4 +5,6 @@ set -e
 cd "$(dirname "$0")"
 . ../override.env
 
-ansible-playbook -e "username=$HOST_USER_NAME" -e "password=$HOST_USER_PASSWORD" "$@"
+uv sync
+
+uv run ansible-playbook -e "username=$HOST_USER_NAME" -e "password=$HOST_USER_PASSWORD" "$@"
