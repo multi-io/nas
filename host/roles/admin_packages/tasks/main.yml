@@ -13,3 +13,4 @@
     - tcpdump
     - libproc-processtable-perl
     - virtualbox-dkms
+    # - mergerfs   # too old; see nas_data role

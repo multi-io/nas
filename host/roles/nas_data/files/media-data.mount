@@ -1,0 +1,16 @@
+[Unit]
+Description=mount /media/data by merging /media/_data*
+After=media-_data2.mount
+After=media-_data3.mount
+Requires=local-fs.target
+Wants=multi-user.target
+
+[Mount]
+What=/media/_data*
+Where=/media/data
+Type=mergerfs
+# TODO update kernel to >=6.6 and change these settings; see https://trapexit.github.io/mergerfs/quickstart/
+Options=cache.files=auto-full,category.create=pfrd,func.getattr=newest,dropcacheonclose=true
+
+[Install]
+WantedBy=multi-user.target

@@ -13,6 +13,7 @@
     - dockerd
     - create_user
     - admin_packages
+    - nas_data
     - nas
 
 - name: Setup user

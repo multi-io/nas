@@ -1,0 +1,26 @@
+# debian-provided mergerfs package is too old, doesn't support statx, which is needed for user access to the filesystem
+# => download newer version from github
+- name: Download mergerfs debian package
+  get_url:
+    url: https://github.com/trapexit/mergerfs/releases/download/2.40.2/mergerfs_2.40.2.debian-{{ debian_release }}_amd64.deb
+    dest: /tmp/mergerfs_2.40.2.debian-{{ debian_release }}_amd64.deb
+    mode: '0644'
+
+- name: Install mergerfs debian package
+  apt:
+    deb: /tmp/mergerfs_2.40.2.debian-{{ debian_release }}_amd64.deb
+    state: present
+
+- name: Upload NAS data mount service definition
+  template:
+    src: files/media-data.mount
+    dest: /etc/systemd/system/media-data.mount
+    mode: "0644"
+
+- name: Start NAS data mount service
+  systemd:
+    daemon_reload: true
+    state: started
+    name: media-data.mount
+    enabled: true
+    no_block: true

@@ -8,3 +8,5 @@
     - debian_base
     - dockerd
     - admin_packages
+    - nas_data
+    - nas
