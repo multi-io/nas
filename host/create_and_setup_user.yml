@@ -9,6 +9,11 @@
 
   vars:
     primary_group: users
+    other_groups:
+      - sudo
+      - src
+      - docker
+      - systemd-journal
 
 - hosts: all
   remote_user: "{{ username }}"
