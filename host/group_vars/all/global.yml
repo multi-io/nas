@@ -1,5 +1,5 @@
-debian_snapshot: 20250502T082704Z
-debian_release: bullseye
+debian_snapshot: 20250720T202733Z
+debian_release: bookworm
 #debian_fallback_release: experimental
 
 create_user: yes
