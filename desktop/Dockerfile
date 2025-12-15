@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM ubuntu:25.10
 MAINTAINER Olaf Klischat <olaf.klischat@gmail.com>
 
 ARG USER_ID=1000
