@@ -52,6 +52,8 @@ volumes:
 
   jellyfin-config:
 
+  vaultwarden-data:
+
 services:
 
   proxy:
@@ -290,6 +292,17 @@ services:
       - /home:/home
       - /media:/media
       - tlscert:/var/opt/tlscert
+
+  vaultwarden:
+    image: vaultwarden/server:1.34.3
+    hostname: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vaultwarden.${LAN_DNS_SUFFIX}"
+    networks:
+      privnet:
+    volumes:
+      - vaultwarden-data:/data
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
