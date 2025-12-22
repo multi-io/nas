@@ -1,5 +1,4 @@
-version: '2'
-
+name: nas
 
 networks:
 
@@ -230,6 +229,7 @@ services:
       LETSENCRYPT_EMAIL: $LETSENCRYPT_EMAIL
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/local/nas:/self
 
   gitlab:
     image: gitlab/gitlab-ee:15.11.0-ee.0
@@ -303,6 +303,36 @@ services:
       privnet:
     volumes:
       - vaultwarden-data:/data
+
+  vaultwarden-backup:
+    image: alpine/sqlite:latest
+    profiles: [ "jobs" ] # Prevents it from running during 'docker compose up'
+    restart: "no"
+    networks:
+      privnet:
+    volumes:
+      - vaultwarden-data:/data
+      - /var/backups:/backups
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        echo "Rotating previous backups..."
+        n=9 # number of backups to keep
+        rm -rf /backups/vaultwarden.$$n
+        for i in $$(seq $$((n-1)) -1 0); do
+          if [ -d "/backups/vaultwarden.$$i" ]; then
+            mv "/backups/vaultwarden.$$i" "/backups/vaultwarden.$$((i+1))"
+          fi
+        done
+        if [ -d "/backups/vaultwarden" ]; then
+          mv "/backups/vaultwarden" "/backups/vaultwarden.0"
+        fi
+        echo "Creating new backup..."
+        mkdir /backups/vaultwarden
+        cp -a /data/icon_cache /data/rsa_key.pem /backups/vaultwarden/
+        sqlite3 /data/db.sqlite3 '.backup /backups/vaultwarden/vaultwarden-db.sqlite3'
+        echo "Backup complete."
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow

@@ -2,4 +2,7 @@
 
 set -e
 
+cd /self
+docker compose run --rm --remove-orphans vaultwarden-backup
+
 /usr/local/bin/backup-host -f -n -l daily
