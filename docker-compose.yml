@@ -68,6 +68,8 @@ configs:
 services:
 
   proxy:
+    labels:
+      de.olaf-klischat.nas.no-dns-sync: "true"
     build:
       context: ./proxy
     networks:
@@ -209,6 +211,7 @@ services:
 
   pushgateway:
     image: prom/pushgateway
+    hostname: pushgateway
     user: root
     networks:
       privnet:
@@ -230,6 +233,8 @@ services:
   cron:
     build:
       context: ./cron
+    labels:
+      de.olaf-klischat.nas.no-dns-sync: "true"
     image: oklischat/cron
     hostname: ${BASENAME}-cron
     networks:
@@ -286,6 +291,7 @@ services:
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:10.9.7
+    hostname: jellyfin
     environment:
       TZ: 'CET'
       PUID: ${USER_ID}
@@ -320,6 +326,8 @@ services:
     image: alpine/sqlite:latest
     profiles: [ "jobs" ] # Prevents it from running during 'docker compose up'
     restart: "no"
+    labels:
+      de.olaf-klischat.nas.no-dns-sync: "true"
     networks:
       privnet:
     volumes:
@@ -348,6 +356,7 @@ services:
 
   mqtt:
     image: eclipse-mosquitto:2.0.22
+    hostname: mqtt
     volumes:
       - mosquitto-data:/mosquitto/data
     configs:
@@ -360,6 +369,8 @@ services:
     restart: always
 
   tasmota-exporter:
+    labels:
+      de.olaf-klischat.nas.no-dns-sync: "true"
     image: eugenezadyra/tasmota-exporter:latest
     networks:
       privnet:
@@ -368,6 +379,22 @@ services:
       MQTT_PORT: 1883
       PROMETHEUS_EXPORTER_PORT: 9092
     restart: unless-stopped
+
+  dnssync:
+    image: oklischat/dnssync:latest
+    profiles: [ "jobs" ] # Prevents it from running during 'docker compose up'
+    build:
+      context: ./dnssync
+    networks:
+      privnet:
+    environment:
+      LAN_DNS_SUFFIX: $LAN_DNS_SUFFIX
+      AWS_ACCESS_KEY_ID: $ROUTE53_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $ROUTE53_SECRET_ACCESS_KEY
+      DNS_TTL: "1200"
+      ROUTE53_ZONE_ID: $ROUTE53_ZONE_ID
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
