@@ -294,7 +294,7 @@ services:
       - tlscert:/var/opt/tlscert
 
   vaultwarden:
-    image: vaultwarden/server:1.34.3
+    image: vaultwarden/server:1.35.2
     hostname: vaultwarden
     restart: unless-stopped
     environment:
