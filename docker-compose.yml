@@ -53,6 +53,18 @@ volumes:
 
   vaultwarden-data:
 
+  mosquitto-data:
+
+configs:
+
+  mosquitto:
+    content: |
+      persistence true
+      persistence_location /mosquitto/data/
+      log_dest stdout
+      listener 1883 0.0.0.0
+      allow_anonymous true
+
 services:
 
   proxy:
@@ -333,6 +345,19 @@ services:
         cp -a /data/icon_cache /data/rsa_key.pem /backups/vaultwarden/
         sqlite3 /data/db.sqlite3 '.backup /backups/vaultwarden/vaultwarden-db.sqlite3'
         echo "Backup complete."
+
+  mqtt:
+    image: eclipse-mosquitto:2.0.22
+    volumes:
+      - mosquitto-data:/mosquitto/data
+    configs:
+      - source: mosquitto
+        target: /mosquitto/config/mosquitto.conf
+    networks:
+      privnet:
+      pubnet:
+        ipv4_address: ${LAN_SUBNET}.30
+    restart: always
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
