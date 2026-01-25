@@ -359,6 +359,16 @@ services:
         ipv4_address: ${LAN_SUBNET}.30
     restart: always
 
+  tasmota-exporter:
+    image: eugenezadyra/tasmota-exporter:latest
+    networks:
+      privnet:
+    environment:
+      MQTT_HOSTNAME: mqtt
+      MQTT_PORT: 1883
+      PROMETHEUS_EXPORTER_PORT: 9092
+    restart: unless-stopped
+
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
 #  - more services: mail, ...

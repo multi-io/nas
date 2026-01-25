@@ -46,3 +46,8 @@ scrape_configs:
     static_configs:
       - targets:
           - pushgateway:9091
+
+  - job_name: 'tasmota'
+    static_configs:
+      - targets:
+          - tasmota-exporter:9092
