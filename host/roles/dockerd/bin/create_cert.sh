@@ -66,7 +66,17 @@ fi
 if [ -z "$signer" ]; then
 
     # self-signed
-    openssl req -new -x509 -days "$days" -subj "$subj"  -key "${outfile}-key.pem" $extopt -sha256 -out "${outfile}.pem";
+    openssl req \
+        -new \
+        -x509 \
+        -days "$days" \
+        -subj "$subj" \
+        -key "${outfile}-key.pem" \
+        -addext "basicConstraints=critical,CA:true" \
+        -addext "keyUsage=critical,digitalSignature,cRLSign,keyCertSign" \
+        $extopt \
+        -sha256 \
+        -out "${outfile}.pem";
 
 else
 
