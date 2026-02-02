@@ -55,8 +55,13 @@
   notify: restart docker
   when: dockerd.remote_access.enabled
 
-- name: upload docker daemon configuration
+- name: upload docker daemon TLS configuration
   copy: src=files/daemon-tls.conf dest=/etc/systemd/system/docker.service.d/
+  notify: restart docker
+  when: dockerd.remote_access.enabled
+
+- name: upload docker daemon configuration
+  copy: src=files/daemon.json dest=/etc/docker/daemon.json
   notify: restart docker
   when: dockerd.remote_access.enabled
 
