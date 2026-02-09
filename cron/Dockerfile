@@ -12,6 +12,7 @@ RUN apt-get update && apt-get -yy upgrade && \
     rm -rf /etc/cron.*/*
 
 COPY crontab /etc/crontab
+COPY hourly/* /etc/cron.hourly/
 COPY daily/* /etc/cron.daily/
 COPY weekly/* /etc/cron.weekly/
 COPY monthly/* /etc/cron.monthly/

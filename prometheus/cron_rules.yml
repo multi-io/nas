@@ -13,6 +13,7 @@ groups:
 
       - alert: CronJobOverdue
         expr: |
+          time() - push_time_seconds{job="cron",dir="/etc/cron.hourly"} > 60*60 or
           time() - push_time_seconds{job="cron",dir="/etc/cron.daily"} > 24*60*60 or
           time() - push_time_seconds{job="cron",dir="/etc/cron.weekly"} > 7*24*60*60 or
           time() - push_time_seconds{job="cron",dir="/etc/cron.monthly"} > 31*24*60*60 or
