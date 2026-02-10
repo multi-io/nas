@@ -1,5 +1,7 @@
 import argparse
+import json
 import os
+from pathlib import Path
 from typing import Optional
 
 import boto3
@@ -53,6 +55,26 @@ def upsert_a_record(
     )
 
 
+def load_cache(path: Path) -> dict[str, str]:
+    """Load FQDN -> IP cache from JSON file. Returns empty dict on missing/invalid file."""
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text())
+        if not isinstance(data, dict):
+            return {}
+        return {k: str(v) for k, v in data.items() if isinstance(v, str)}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_cache(path: Path, data: dict[str, str]) -> None:
+    """Write FQDN -> IP cache to JSON file. Creates parent directory if needed."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, sort_keys=True) + "\n")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Sync Docker container DNS to Route53.")
     parser.add_argument(
@@ -85,6 +107,12 @@ def main() -> None:
         default=os.environ.get("DRY_RUN", "false").lower() in {"1", "true", "yes", "y", "on"},
         help="Print intended DNS changes without applying them.",
     )
+    parser.add_argument(
+        "--cache-file",
+        type=Path,
+        default=os.environ.get("DNSSYNC_CACHE_FILE", "/var/cache/dnssync/records.json"),
+        help="Path to JSON file caching last-written DNS records (FQDN -> IP).",
+    )
     args = parser.parse_args()
 
     if not args.lan_dns_suffix:
@@ -106,6 +134,12 @@ def main() -> None:
     if not proxy_ip:
         raise RuntimeError(f"Proxy container has no IP in {pubnet_name}")
 
+    cache_path = Path(args.cache_file)
+    cache: dict[str, str] = {}
+    cache_modified = False
+    if not args.dry_run:
+        cache = load_cache(cache_path)
+
     for container in docker_client.containers.list(filters={"label": f"com.docker.compose.project={args.compose_project}"}):
         if container.labels.get("de.olaf-klischat.nas.no-dns-sync") == "true":
             print(f"Skipping {container.name}: no-dns-sync label set")
@@ -124,13 +158,21 @@ def main() -> None:
             print(f"DRY-RUN: would update {fqdn} -> {target_ip}")
             continue
 
+        if cache.get(fqdn) == target_ip:
+            continue
+
         try:
             upsert_a_record(route53, zone_id, fqdn, target_ip, args.ttl)
         except ClientError as exc:
             print(f"Failed to update {fqdn} -> {target_ip}: {exc}")
             continue
 
+        cache[fqdn] = target_ip
+        cache_modified = True
         print(f"Updated {fqdn} -> {target_ip}")
+
+    if cache_modified:
+        save_cache(cache_path, cache)
 
 
 if __name__ == "__main__":

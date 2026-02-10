@@ -55,6 +55,8 @@ volumes:
 
   mosquitto-data:
 
+  dnssync-cache:
+
 configs:
 
   mosquitto:
@@ -395,6 +397,7 @@ services:
       ROUTE53_ZONE_ID: $ROUTE53_ZONE_ID
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - dnssync-cache:/var/cache/dnssync
 
 # TODO:
 #  - share ${USER_NAME}'s account (passwd/PAM) among containers that access it (desktop, files, maybe www) somehow
