@@ -30,9 +30,6 @@ volumes:
 
   desktop_log:
 
-  ovpn-config:
-    external: true
-
   prom-tsdb:
 
   grafana-storage:
@@ -145,18 +142,6 @@ services:
     volumes:
       - /home:/home
       - /media:/media
-
-  vpn:
-    image: kylemanna/openvpn
-    hostname: ${BASENAME}vpn
-    networks:
-      privnet:
-      pubnet:
-        ipv4_address: ${LAN_SUBNET}.19
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - ovpn-config:/etc/openvpn
 
   vnc:
     image: oklischat/ubuntu-xfce-vnc:1.5.1
