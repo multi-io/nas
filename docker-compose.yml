@@ -368,6 +368,8 @@ services:
     restart: unless-stopped
 
   dnssync:
+    labels:
+      de.olaf-klischat.nas.no-dns-sync: "true"
     image: oklischat/dnssync:latest
     profiles: [ "jobs" ] # Prevents it from running during 'docker compose up'
     build:
@@ -376,6 +378,7 @@ services:
       privnet:
     environment:
       LAN_DNS_SUFFIX: $LAN_DNS_SUFFIX
+      PUBLIC_HOSTNAME: $PUBLIC_HOSTNAME
       AWS_ACCESS_KEY_ID: $ROUTE53_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY: $ROUTE53_SECRET_ACCESS_KEY
       DNS_TTL: "1200"

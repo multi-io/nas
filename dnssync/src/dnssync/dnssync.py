@@ -1,5 +1,7 @@
 import argparse
+import ipaddress
 import json
+import urllib.request
 import os
 from pathlib import Path
 from typing import Optional
@@ -54,7 +56,6 @@ def upsert_a_record(
         },
     )
 
-
 def load_cache(path: Path) -> dict[str, str]:
     """Load FQDN -> IP cache from JSON file. Returns empty dict on missing/invalid file."""
     if not path.exists():
@@ -90,9 +91,15 @@ def main() -> None:
         help="LAN DNS suffix.",
     )
     parser.add_argument(
+        "--public-hostname",
+        type=str,
+        default=os.environ.get("PUBLIC_HOSTNAME"),
+        help="Public hostname.",
+    )
+    parser.add_argument(
         "--ttl",
         type=int,
-        default=int(os.environ.get("DNS_TTL", "1200")),
+        default=int(os.environ.get("DNS_TTL", "300")),
         help="DNS TTL in seconds.",
     )
     parser.add_argument(
@@ -134,11 +141,7 @@ def main() -> None:
     if not proxy_ip:
         raise RuntimeError(f"Proxy container has no IP in {pubnet_name}")
 
-    cache_path = Path(args.cache_file)
-    cache: dict[str, str] = {}
-    cache_modified = False
-    if not args.dry_run:
-        cache = load_cache(cache_path)
+    records: dict[str, str] = {}
 
     for container in docker_client.containers.list(filters={"label": f"com.docker.compose.project={args.compose_project}"}):
         if container.labels.get("de.olaf-klischat.nas.no-dns-sync") == "true":
@@ -154,6 +157,22 @@ def main() -> None:
         target_ip = container_ip or proxy_ip
         fqdn = f"{hostname}.{args.lan_dns_suffix}"
 
+        records[fqdn] = target_ip
+
+    if args.public_hostname:
+        try:
+            public_ip = ipaddress.ip_address(urllib.request.urlopen("https://icanhazip.com").read().decode().strip())
+            records[args.public_hostname] = str(public_ip)
+        except Exception as exc:
+            print(f"Failed to get public IP address: {exc}. Skipping public hostname record.")
+
+    cache_path = Path(args.cache_file)
+    cache: dict[str, str] = {}
+    cache_modified = False
+    if not args.dry_run:
+        cache = load_cache(cache_path)
+
+    for fqdn, target_ip in records.items():
         if args.dry_run:
             print(f"DRY-RUN: would update {fqdn} -> {target_ip}")
             continue
