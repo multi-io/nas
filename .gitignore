@@ -7,3 +7,4 @@
 /host/roles/dockerd/out/
 /.git-myconfig/
 __pycache__/
+wireguard/peers.conf
